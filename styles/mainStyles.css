@@ -26,6 +26,7 @@ html, body
   height:500px;
   width: 500px;
   background-color: yellow;
+  display: none;
 }
 
 .block
@@ -37,6 +38,7 @@ html, body
   border: 1px solid gray;
   box-sizing: border-box;
   z-index: 10;
+  background-color: purple;
 }
 
 .regular
@@ -55,7 +57,7 @@ html, body
 }
 
 .player {
-  background-color: red;
+  background-color: red;!important
 }
 
 #victory
@@ -64,4 +66,51 @@ html, body
   position: relative;
   display: none;
   font-size: 68px;
+}
+
+#title
+{
+  text-align: center;
+  color: gold;
+  font-size: 69px;
+}
+
+#home
+{
+  height: 500px;
+  width: 500px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.level
+{
+  text-align: center;
+  color: gold;
+  font-size: 30px;
+  margin: 0px;
+  padding: 10px;
+  width: 100px;
+}
+
+.level:hover
+{
+  font-size: 40px;
+  width: 130px;
+}
+
+.help
+{
+  text-align: center;
+  color: gold;
+  font-size: 20px;
+  margin: 0px;
+  padding: 10px;
+  font-weight: lighter;
+}
+
+.help PRE
+{
+  margin: 0;
 }

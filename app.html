@@ -6,12 +6,21 @@
         <script src="scripts/mainScript.js"></script>
         <script src="scripts/Board.js"></script>
         <script src="scripts/Block.js"></script>
-        <script src="scripts/map.js"></script>
+        <script src="scripts/maps.js"></script>
         <script src="scripts/Player.js"></script>
         <script src="scripts/Direction.js"></script>
     </head>
-    <body onload="main()">
+    <body>
         <div id="main">
+          <div id="home">
+            <h1 id="title">FLOP</h1>
+            <h3 class="level" onclick="selectLevel(1)">Level 1</h3>
+            <h3 class="level" onclick="selectLevel(2)">Level 2</h3>
+            <h3 class="level" onclick="selectLevel(3)">Level 3</h3>
+            <h3 class="level" onclick="selectLevel(4)">Level 4</h3>
+            <h3 class="level" onclick="selectLevel(5)">Level 5</h3>
+            <h5 class="help"><PRE>wasd - move  r - reset  b - back</PRE></h5>
+          </div>
           <div id="board">
           </div>
           <h1 id="victory">Congratulations!</h1>

@@ -12,11 +12,21 @@ class Board {
           block = new Block(i+""+j, j, i, "regular");
         } else if (this.array[i][j] == 0){
           block = new Block(i+""+j, j, i, "dead");
-        } else {
+        } else if (this.array[i][j] == -1) {
           block = new Block(i+""+j, j, i, "goal");
+        } else if (this.array[i][j] == 5) {
+          block = new Block(i+""+j, j, i, "regular");
+          playerStartLocation = [i,j];
         }
         this.blocks.push(block);
       }
+    }
+  }
+
+  clear() {
+    this.blocks = [];
+    while (this.getView().hasChildNodes()) {
+      this.getView().removeChild(this.getView().firstChild);
     }
   }
 
