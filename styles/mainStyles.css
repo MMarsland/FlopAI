@@ -1,0 +1,67 @@
+html, body
+{
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#main
+{
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: gray;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    min-width: 500px;
+    cursor: grab;
+}
+
+#board
+{
+  position: relative;
+  background: black;
+  height:500px;
+  width: 500px;
+  background-color: yellow;
+}
+
+.block
+{
+  display: flex;
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  border: 1px solid gray;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.regular
+{
+  background-color: lightgray;
+}
+
+.dead
+{
+  background-color: gray;
+}
+
+.goal
+{
+  background-color: black;
+}
+
+.player {
+  background-color: red;
+}
+
+#victory
+{
+  color: gold;
+  position: relative;
+  display: none;
+  font-size: 68px;
+}
