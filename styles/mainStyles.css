@@ -19,14 +19,13 @@ html, body
     cursor: grab;
 }
 
-#board
+#title
 {
-  position: relative;
-  background: black;
-  height:500px;
-  width: 500px;
-  background-color: yellow;
-  display: none;
+  text-align: center;
+  color: gold;
+  font-size: 69px;
+  margin-top: 46px;
+  margin-bottom: 16px;
 }
 
 .block
@@ -57,41 +56,47 @@ html, body
 }
 
 .player {
-  background-color: red;!important
-}
-
-#victory
-{
-  color: gold;
-  position: relative;
-  display: none;
-  font-size: 68px;
-}
-
-#title
-{
-  text-align: center;
-  color: gold;
-  font-size: 69px;
+  background-color: red;
 }
 
 #home
 {
+  display: flex;
   height: 500px;
   width: 500px;
-  display: flex;
   align-items: center;
   flex-direction: column;
 }
 
+#board
+{
+  display: block;
+  position: relative;
+  background: black;
+  height:500px;
+  width: 500px;
+  background-color: yellow;
+}
+
+#victory
+{
+  display: block;
+  color: gold;
+  position: relative;
+  font-size: 68px;
+}
+
 .level
 {
-  text-align: center;
+
   color: gold;
   font-size: 30px;
-  margin: 0px;
-  padding: 10px;
+  height: 54px;
   width: 100px;
+  margin: 0px;
+  padding: 0px 10px 0px 10px;
+  text-align: center;
+  line-height: 54px;
 }
 
 .level:hover
@@ -106,6 +111,7 @@ html, body
   color: gold;
   font-size: 20px;
   margin: 0px;
+  margin-top: 20px;
   padding: 10px;
   font-weight: lighter;
 }
@@ -113,4 +119,8 @@ html, body
 .help PRE
 {
   margin: 0;
+}
+
+.hidden {
+  display: none !important;
 }
