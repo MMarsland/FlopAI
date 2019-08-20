@@ -88,11 +88,10 @@ html, body
 
 .level
 {
-
   color: gold;
   font-size: 30px;
   height: 54px;
-  width: 100px;
+  width: 130px;
   margin: 0px;
   padding: 0px 10px 0px 10px;
   text-align: center;
@@ -102,23 +101,27 @@ html, body
 .level:hover
 {
   font-size: 40px;
-  width: 130px;
 }
 
-.help
-{
-  text-align: center;
-  color: gold;
-  font-size: 20px;
+#nNUpload {
+  color: black;
+  font-size: 30px;
+  height: 64px;
+  width: 300px;
   margin: 0px;
-  margin-top: 20px;
-  padding: 10px;
-  font-weight: lighter;
+  margin-top: 200px;
+  padding: 0px 10px 0px 10px;
+  text-align: center;
+  line-height: 54px;
 }
 
-.help PRE
+#nNUpload:hover
 {
-  margin: 0;
+  font-size: 40px;
+}
+
+#brainInput {
+  display: none;
 }
 
 .hidden {

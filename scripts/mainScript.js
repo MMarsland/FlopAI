@@ -6,6 +6,34 @@ let level;
 let playerStartLocation;
 let currentView = "home";
 
+function download(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+function readBrain() {
+  let input = document.getElementById("brainInput");
+  if (input.files && input.files[0]) {
+      var reader = new FileReader();
+      reader.onload = function(){
+        decodeBrain(reader.result);
+      };
+      reader.readAsText(input.files[0]);
+  }
+}
+
+function decodeBrain(text) {
+  console.log(text);
+}
+
 function reset() {
   player.erase();
   player = new Player(playerStartLocation[0],playerStartLocation[1], new Direction(null));
@@ -18,19 +46,7 @@ function back() {
   changeViewTo("home");
   board.clear();
 }
-/*
-function changeColor(event) {
-  event.preventDefault();
-  event.target.classList.remove("regular");
-  event.target.classList.add("dead");
-}
 
-function changeColorBack(event) {
-  event.preventDefault();
-  event.target.classList.remove("dead");
-  event.target.classList.add("regular");
-}
-*/
 function changeViewTo(viewName) {
   switch (viewName) {
     case "home":
@@ -71,10 +87,6 @@ function getVictoryView() {
   return document.getElementById("victory");
 }
 
-function victory() {
-  changeViewTo("victory");
-}
-
 function selectLevel(level) {
   switch(level)
   {
@@ -91,7 +103,7 @@ function selectLevel(level) {
       map = map5;
       break;
     default:
-      map = map1;
+      map = mapAI1;
   }
 
   console.log("Loading");
@@ -102,6 +114,51 @@ function selectLevel(level) {
   player.display();
   goalId = document.getElementsByClassName("goal")[0].getAttribute("id");
   changeViewTo("board");
+}
+
+function keyPressed(keyCode) {
+  //comment
+  //console.log(keyCode);
+  if (currentView != "home") {
+    if (keyCode == 87 || keyCode == 38) {
+      player.moveN();
+    } else if (keyCode == 65 || keyCode == 37) {
+      player.moveW();
+    } else if (keyCode == 83 || keyCode == 40) {
+      player.moveS();
+    } else if (keyCode == 68 || keyCode == 39) {
+      player.moveE();
+    } else if (keyCode == 82) {
+      reset();
+    } else if (keyCode == 66) {
+      back();
+    } else if (keyCode == 77 && currentView == "board") {
+      saveMap();
+    }
+    //console.log(player);
+    //Check victory
+    if (player.getLocationId(0,0) == goalId && player.direction.name() == null){
+      changeViewTo("victory");
+    }
+  }
+}
+
+document.onkeydown = function (e) {
+    e = e || window.event;
+    // use e.keyCode
+    keyPressed(e.keyCode);
+};
+
+function changeColor(event) {
+  event.preventDefault();
+  event.target.classList.remove("regular");
+  event.target.classList.add("dead");
+}
+
+function changeColorBack(event) {
+  event.preventDefault();
+  event.target.classList.remove("dead");
+  event.target.classList.add("regular");
 }
 
 function saveMap() {
@@ -141,38 +198,5 @@ function saveMap() {
   }
   mapText += "];";
   console.log(mapText);
-  //Save map to file?
+  download("map", mapText);
 }
-
-function keyPressed(keyCode) {
-  //comment
-  console.log(keyCode);
-  if (currentView != "home") {
-    if (keyCode == 87 || keyCode == 38) {
-      player.moveN();
-    } else if (keyCode == 65 || keyCode == 37) {
-      player.moveW();
-    } else if (keyCode == 83 || keyCode == 40) {
-      player.moveS();
-    } else if (keyCode == 68 || keyCode == 39) {
-      player.moveE();
-    } else if (keyCode == 82) {
-      reset();
-    } else if (keyCode == 66) {
-      back();
-    } else if (keyCode == 77 && currentView == "board") {
-      saveMap();
-    }
-    //console.log(player);
-    //Check victory
-    if (player.getLocationId(0,0) == goalId && player.direction.name() == null){
-      victory();
-    }
-  }
-}
-
-document.onkeydown = function (e) {
-    e = e || window.event;
-    // use e.keyCode
-    keyPressed(e.keyCode);
-};
