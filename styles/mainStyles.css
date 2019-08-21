@@ -16,7 +16,7 @@ html, body
     width: 100%;
     justify-content: center;
     min-width: 500px;
-    cursor: grab;
+    cursor: pointer;
 }
 
 #title
@@ -84,6 +84,10 @@ html, body
   color: gold;
   position: relative;
   font-size: 68px;
+}
+
+#moveNum {
+  text-align: center;
 }
 
 .level

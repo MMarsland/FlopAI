@@ -32,6 +32,32 @@ class Player {
     return (this.x_position+x_offset)+""+(this.y_position+y_offset);
   }
 
+  move(direction)
+  {
+    switch(direction){
+      case "N":
+        this.moveN();
+        break;
+      case "E":
+        this.moveE();
+        break;
+      case "S":
+        this.moveS();
+        break;
+      case "W":
+        this.moveW();
+        break;
+      default:
+        console.log("ERROR!");
+        alert("ERROR!");
+        break;
+    }
+    moveNum++;
+    if (player.getLocationId(0,0) == goalId && player.direction.name() == null){
+      victory();
+    }
+  }
+
   moveN() {
     // 5 cases.
     if ((this.direction.name() == null) && this.x_position > 1 && !(this.findBlockById(this.getLocationId(-1,0)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(-2,0)).classList.contains("dead"))) {

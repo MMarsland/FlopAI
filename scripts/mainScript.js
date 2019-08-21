@@ -5,7 +5,10 @@ let map;
 let level;
 let playerStartLocation;
 let currentView = "home";
+let aIRunning = false;
+let moveNum = 0;
 
+// Nural Network Functions
 function download(filename, text) {
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -34,11 +37,144 @@ function decodeBrain(text) {
   console.log(text);
 }
 
+async function runAI() {
+  console.log("Starting the AI");
+  //Loop AI forever (Until victory)
+  while(aIRunning) {
+    // Decide On move
+    let chosenMove = pickMove();
+    // Make Move
+    moveAI(chosenMove);
+    // Wait for the right time
+    await sleep(100);
+    // Repeat
+  }
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function moveAI(direction) {
+  console.log("Moving: "+direction);
+  switch(direction) {
+    case "N":
+      player.move("N");
+      break;
+    case "E":
+      player.move("E");
+      break;
+    case "S":
+      player.move("S");
+      break;
+    case "W":
+      player.move("W");
+      break;
+    default:
+      console.log("ERROR!");
+      alert("ERROR!");
+      break;
+  }
+}
+
+function pickMove() {
+  console.log("Selecting a move...");
+  // Get Inputs
+  // Use Nural Network to decide on move
+
+  // Temporary (Just Move Randomly!)
+  // NEXT: Make it only do legal moves!! (Check legal functions, Check nearby blocks, the nural network could learn this on its own...)
+  // NEXT: Design Nural Network system / chain (Hidden Layers)
+  // NEXT: Unsupervised Learning?
+  // I need to learn the best way to make a nural network...
+  // Rewards: Less Moves, Reached Goal
+  // Inputs: Goal Location, Nearby Blocks, Lines? Entire Map?..(100 inputs?...)
+
+  let moveInt = getRandInt(0,3);
+  let direction;
+  switch(moveInt) {
+    case 0:
+      direction = "N";
+      break;
+    case 1:
+      direction = "E";
+      break;
+    case 2:
+      direction = "S";
+      break;
+    case 3:
+      direction = "W";
+      break;
+    default:
+      console.log("ERROR!");
+      alert("ERROR!");
+      break;
+  }
+
+  // Return Move
+  return direction;
+}
+
+function getRandInt(min, max) {
+    let realMax = max+1;
+    var random = (Math.floor(Math.random() * (realMax-min)) + min);
+    return random;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// Regular Game Functions
+function keyPressed(keyCode) {
+  //comment
+  //console.log(keyCode);
+  if (currentView != "home") {
+    if (keyCode == 87 || keyCode == 38) {
+      player.move("N");
+    } else if (keyCode == 65 || keyCode == 37) {
+      player.move("W");
+    } else if (keyCode == 83 || keyCode == 40) {
+      player.move("S");
+    } else if (keyCode == 68 || keyCode == 39) {
+      player.move("E");
+    } else if (keyCode == 82) {
+      reset();
+    } else if (keyCode == 66) {
+      back();
+    } else if (keyCode == 77 && currentView == "board") {
+      saveMap();
+    } else if (keyCode == 71) {
+      if (!aIRunning) {
+        aIRunning = true;
+        runAI();
+      } else {
+        aIRunning = false;
+      }
+
+    }
+  }
+}
+
+function victory() {
+  changeViewTo("victory");
+  aIRunning = false;
+  document.getElementById("moveNum").innerHTML = ("Moves: "+moveNum);
+}
+
 function reset() {
   player.erase();
   player = new Player(playerStartLocation[0],playerStartLocation[1], new Direction(null));
   player.display();
   changeViewTo("board");
+  moveNum = 0;
 }
 
 function back() {
@@ -114,33 +250,7 @@ function selectLevel(level) {
   player.display();
   goalId = document.getElementsByClassName("goal")[0].getAttribute("id");
   changeViewTo("board");
-}
-
-function keyPressed(keyCode) {
-  //comment
-  //console.log(keyCode);
-  if (currentView != "home") {
-    if (keyCode == 87 || keyCode == 38) {
-      player.moveN();
-    } else if (keyCode == 65 || keyCode == 37) {
-      player.moveW();
-    } else if (keyCode == 83 || keyCode == 40) {
-      player.moveS();
-    } else if (keyCode == 68 || keyCode == 39) {
-      player.moveE();
-    } else if (keyCode == 82) {
-      reset();
-    } else if (keyCode == 66) {
-      back();
-    } else if (keyCode == 77 && currentView == "board") {
-      saveMap();
-    }
-    //console.log(player);
-    //Check victory
-    if (player.getLocationId(0,0) == goalId && player.direction.name() == null){
-      changeViewTo("victory");
-    }
-  }
+  reset();
 }
 
 document.onkeydown = function (e) {
