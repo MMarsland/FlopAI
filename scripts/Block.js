@@ -12,8 +12,8 @@ class Block {
     block.setAttribute("id", this.viewId);
     block.setAttribute("style", "left: "+(50*(this.x_offset)+"px"));
     block.setAttribute("style", block.getAttribute("style")+"; top: "+(50*(this.y_offset)+"px"));
-    //block.setAttribute("onclick", "changeColor(event)");
-    //block.setAttribute("oncontextmenu", "changeColorBack(event)");
+    block.setAttribute("onclick", "changeColor(event)");
+    block.setAttribute("oncontextmenu", "changeColorBack(event)");
 
     parent.appendChild(block);
   }

@@ -5,6 +5,7 @@
       <link rel="stylesheet" type="text/css" href="styles/mainStyles.css">
       <script src="scripts/Block.js"></script>
       <script src="scripts/Board.js"></script>
+      <script src="scripts/Decoder.js"></script>
       <script src="scripts/Direction.js"></script>
       <script src="scripts/mainScript.js"></script>
       <script src="scripts/Maps.js"></script>
@@ -15,13 +16,23 @@
           <div id="home">
             <h1 id="title">FLOP AI</h1>
             <h3 class="level" onclick="selectLevel(1)">Level 1</h3>
-            <!--<h3 class="level" onclick="selectLevel(2)">Level 2</h3>-->
+            <h3 class="level" onclick="selectLevel(2)">Level 2</h3>
+            <h3 class="level" onclick="selectLevel(3)">Level 3</h3>
+            <h3 class="level" onclick="selectLevel(4)">Level 4</h3>
+            <h3 class="level" onclick="selectLevel(5)">Level 5</h3>
+            
             <h3 id="nNUpload" onclick="document.getElementById('brainInput').click()">Upload a Brain</h3>
             <input id="brainInput" type="file" onchange="readBrain()"/>
           </div>
+
           <div id="board" class="hidden">
+            <div id="playArea">
+            </div>
+            <div id="sidebar">
+                <p id="moveNum">Moves: 0</p>
+            </div>
           </div>
-          <h1 id="victory" class="hidden"><p>Congratulations!</p><p id="moveNum">Moves: 0</p></h1>
+          <h1 id="victory" class="hidden"><p>Congratulations!</p><p id="victoryMoveNum">Moves: 0</p></h1>
         </div>
     </body>
 </html>

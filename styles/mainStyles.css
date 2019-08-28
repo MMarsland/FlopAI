@@ -17,6 +17,7 @@ html, body
     justify-content: center;
     min-width: 500px;
     cursor: pointer;
+
 }
 
 #title
@@ -72,10 +73,29 @@ html, body
 {
   display: block;
   position: relative;
+}
+
+#playArea {
+  display: block;
+  position: relative;
   background: black;
   height:500px;
   width: 500px;
   background-color: yellow;
+  border: 1px solid gold;
+  margin-left: 250px;
+}
+
+#sidebar {
+  position: absolute;
+  left: -1px;
+  top: 0px;
+  width: 250px;
+  height: 500px;
+  border: 1px solid gold;
+  background: green;
+  color: gold;
+  font-size: 45px;
 }
 
 #victory
@@ -86,9 +106,10 @@ html, body
   font-size: 68px;
 }
 
-#moveNum {
+#moveNum, #victoryMoveNum {
   text-align: center;
 }
+
 
 .level
 {
@@ -108,12 +129,13 @@ html, body
 }
 
 #nNUpload {
+  position: absolute;
+  bottom: 64px;
   color: black;
   font-size: 30px;
   height: 64px;
   width: 300px;
   margin: 0px;
-  margin-top: 200px;
   padding: 0px 10px 0px 10px;
   text-align: center;
   line-height: 54px;

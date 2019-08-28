@@ -28,4 +28,17 @@ class Direction {
   y() {
     return this.y_direction;
   }
+  getNumber() {
+    if (this.direction == null) {
+      return 0;
+    } else if (this.direction == "N") {
+      return 1;
+    } else if (this.direction == "E") {
+      return 2;
+    } else if (this.direction == "S") {
+      return 3;
+    } else if (this.direction == "W") {
+      return 4;
+    }
+  }
 }

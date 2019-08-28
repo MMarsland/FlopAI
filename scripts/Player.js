@@ -32,8 +32,7 @@ class Player {
     return (this.x_position+x_offset)+""+(this.y_position+y_offset);
   }
 
-  move(direction)
-  {
+  move(direction){
     switch(direction){
       case "N":
         this.moveN();
@@ -53,9 +52,11 @@ class Player {
         break;
     }
     moveNum++;
+    updateSidebar();
     if (player.getLocationId(0,0) == goalId && player.direction.name() == null){
       victory();
     }
+
   }
 
   moveN() {

@@ -7,6 +7,7 @@ let playerStartLocation;
 let currentView = "home";
 let aIRunning = false;
 let moveNum = 0;
+let decodedMapDirections;
 
 // Nural Network Functions
 function download(filename, text) {
@@ -38,15 +39,22 @@ function decodeBrain(text) {
 }
 
 async function runAI() {
+  // Also Words
   console.log("Starting the AI");
   //Loop AI forever (Until victory)
+
+  //Decode the map!
+  console.log("Decoding the map!");
+  decodedMapDirections = decode(getMapArray());
+  console.log(decodedMapDirections);
+
   while(aIRunning) {
     // Decide On move
     let chosenMove = pickMove();
     // Make Move
     moveAI(chosenMove);
     // Wait for the right time
-    await sleep(100);
+    await sleep(1);
     // Repeat
   }
 }
@@ -78,18 +86,13 @@ function moveAI(direction) {
 }
 
 function pickMove() {
+  // Words
   console.log("Selecting a move...");
   // Get Inputs
   // Use Nural Network to decide on move
 
   // Temporary (Just Move Randomly!)
-  // NEXT: Make it only do legal moves!! (Check legal functions, Check nearby blocks, the nural network could learn this on its own...)
-  // NEXT: Design Nural Network system / chain (Hidden Layers)
-  // NEXT: Unsupervised Learning?
-  // I need to learn the best way to make a nural network...
-  // Rewards: Less Moves, Reached Goal
-  // Inputs: Goal Location, Nearby Blocks, Lines? Entire Map?..(100 inputs?...)
-
+  /*
   let moveInt = getRandInt(0,3);
   let direction;
   switch(moveInt) {
@@ -109,7 +112,12 @@ function pickMove() {
       console.log("ERROR!");
       alert("ERROR!");
       break;
-  }
+  } */
+
+
+  // TEMP 2: Use the Map Decoder to determine the best move based on current position!
+  direction = getBestNextDirection(player.x_position, player.y_position, player.direction.getNumber());
+
 
   // Return Move
   return direction;
@@ -121,6 +129,10 @@ function getRandInt(min, max) {
     return random;
 }
 
+function getBestNextDirection(x,y,z) {
+  let directions = decodedMapDirections;
+  return directions[z][x][y];
+}
 
 
 
@@ -129,6 +141,16 @@ function getRandInt(min, max) {
 
 
 
+
+
+
+
+
+// Display Functions
+function updateSidebar() {
+  // Update Move count
+  document.getElementById("moveNum").innerHTML = ("Moves: "+moveNum);
+}
 
 
 
@@ -136,29 +158,26 @@ function getRandInt(min, max) {
 function keyPressed(keyCode) {
   //comment
   //console.log(keyCode);
-  if (currentView != "home") {
-    if (keyCode == 87 || keyCode == 38) {
-      player.move("N");
-    } else if (keyCode == 65 || keyCode == 37) {
-      player.move("W");
-    } else if (keyCode == 83 || keyCode == 40) {
-      player.move("S");
-    } else if (keyCode == 68 || keyCode == 39) {
-      player.move("E");
-    } else if (keyCode == 82) {
-      reset();
-    } else if (keyCode == 66) {
-      back();
-    } else if (keyCode == 77 && currentView == "board") {
-      saveMap();
-    } else if (keyCode == 71) {
-      if (!aIRunning) {
-        aIRunning = true;
-        runAI();
-      } else {
-        aIRunning = false;
-      }
-
+  if (keyCode == 87 || keyCode == 38 && currentView == "board") { // W
+    player.move("N");
+  } else if (keyCode == 65 || keyCode == 37 && currentView == "board") { // A
+    player.move("W");
+  } else if (keyCode == 83 || keyCode == 40 && currentView == "board") { // S
+    player.move("S");
+  } else if (keyCode == 68 || keyCode == 39 && currentView == "board") { // D
+    player.move("E");
+  } else if (keyCode == 82 && currentView != "home") { // R
+    reset();
+  } else if (keyCode == 66 && currentView != "home") { // B
+    back();
+  } else if (keyCode == 77 && currentView != "home") { // M
+    saveMap(getMapArray());
+  } else if (keyCode == 71 && currentView == "board") { // G
+    if (!aIRunning) {
+      aIRunning = true;
+      runAI();
+    } else {
+      aIRunning = false;
     }
   }
 }
@@ -166,7 +185,7 @@ function keyPressed(keyCode) {
 function victory() {
   changeViewTo("victory");
   aIRunning = false;
-  document.getElementById("moveNum").innerHTML = ("Moves: "+moveNum);
+  document.getElementById("victoryMoveNum").innerHTML = ("Moves: "+moveNum);
 }
 
 function reset() {
@@ -175,6 +194,7 @@ function reset() {
   player.display();
   changeViewTo("board");
   moveNum = 0;
+  updateSidebar();
 }
 
 function back() {
@@ -226,8 +246,11 @@ function getVictoryView() {
 function selectLevel(level) {
   switch(level)
   {
+    case 1:
+      map = mapAI1;
+      break;
     case 2:
-      map = map2;
+      map = mapAI2;
       break;
     case 3:
       map = map3;
@@ -238,15 +261,13 @@ function selectLevel(level) {
     case 5:
       map = map5;
       break;
-    default:
-      map = mapAI1;
   }
 
   console.log("Loading");
   board = new Board(map);
   board.populate();
   board.display();
-  player = new Player(playerStartLocation[0],playerStartLocation[1], new Direction(null));
+  player = new Player(playerStartLocation[0], playerStartLocation[1], new Direction(null));
   player.display();
   goalId = document.getElementsByClassName("goal")[0].getAttribute("id");
   changeViewTo("board");
@@ -271,30 +292,26 @@ function changeColorBack(event) {
   event.target.classList.add("regular");
 }
 
-function saveMap() {
+function getMapArray() {
   let playerPos = player.getLocationId(0,0);
-  var mapText = "[";
+  var mapArray = [[],[],[],[],[],[],[],[],[],[]];
   for (let i=0; i<10; i++) {
-    mapText += "[";
     for (let j=0; j<10; j++) {
       let blockId = i+""+j;
       let style = document.getElementById(blockId).classList[1];
-      console.log(style);
       if (playerPos == blockId)
       {
-        mapText += "3";
+        mapArray[i][j] = 3;
       } else {
-        console.log(style);
-        console.log(board.blocks[i][j]);
         switch (style) {
           case "regular":
-            mapText += "1";
+            mapArray[i][j] = 1;
             break;
           case "dead":
-            mapText += "0";
+            mapArray[i][j] = 0;
             break;
           case "goal":
-            mapText += "2";
+            mapArray[i][j] = 2;
             break;
           default:
             console.log("ERROR!!!");
@@ -302,6 +319,18 @@ function saveMap() {
             break;
         }
       }
+    }
+  }
+  return mapArray;
+}
+
+function saveMap(mapArray) {
+  // Saves a map array
+  let mapText = "[";
+  for (let i=0; i<10; i++) {
+    mapText += "[";
+    for (let j=0; j<10; j++) {
+      mapText += mapArray[i][j] + "";
       mapText += (j==9)? "" : ",";
     }
     mapText += (i==9)? "]" : "],\n";

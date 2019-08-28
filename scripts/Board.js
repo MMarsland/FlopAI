@@ -40,6 +40,6 @@ class Board {
   }
 
   getView(){
-    return document.getElementById("board");
+    return document.getElementById("playArea");
   }
 }
