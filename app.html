@@ -5,11 +5,13 @@
       <link rel="stylesheet" type="text/css" href="styles/mainStyles.css">
       <script src="scripts/Block.js"></script>
       <script src="scripts/Board.js"></script>
+      <script src="scripts/Brain.js"></script>
       <script src="scripts/Decoder.js"></script>
       <script src="scripts/Direction.js"></script>
       <script src="scripts/mainScript.js"></script>
       <script src="scripts/Maps.js"></script>
       <script src="scripts/Player.js"></script>
+      <script src="scripts/Position.js"></script>
     </head>
     <body>
         <div id="main">
@@ -20,7 +22,7 @@
             <h3 class="level" onclick="selectLevel(3)">Level 3</h3>
             <h3 class="level" onclick="selectLevel(4)">Level 4</h3>
             <h3 class="level" onclick="selectLevel(5)">Level 5</h3>
-            
+
             <h3 id="nNUpload" onclick="document.getElementById('brainInput').click()">Upload a Brain</h3>
             <input id="brainInput" type="file" onchange="readBrain()"/>
           </div>

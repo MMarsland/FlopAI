@@ -1,16 +1,14 @@
 class Player {
-  constructor (x_position, y_position, direction) {
-    this.x_position = x_position;
-    this.y_position = y_position;
-    this.direction = direction;
+  constructor (x, y, direction) {
+    this.position = new Position(x,y,direction);
   }
 
 
   display() {
     let mainBlockView = this.findBlockById(this.getLocationId(0,0));
     mainBlockView.classList.add("player");
-    if (this.direction.name()) {
-      let secondaryBlockView = this.findBlockById(this.getLocationId(this.direction.x(), this.direction.y()));
+    if (this.position.direction.name) {
+      let secondaryBlockView = this.findBlockById(this.getLocationId(this.position.direction.xOffset(), this.position.direction.yOffset()));
       secondaryBlockView.classList.add("player");
     }
   }
@@ -18,8 +16,8 @@ class Player {
   erase() {
     let mainBlockView = this.findBlockById(this.getLocationId(0,0));
     mainBlockView.classList.remove("player");
-    if (this.direction.name()) {
-      let secondaryBlockView = this.findBlockById(this.getLocationId(this.direction.x(), this.direction.y()));
+    if (this.position.direction.name) {
+      let secondaryBlockView = this.findBlockById(this.getLocationId(this.position.direction.xOffset(), this.position.direction.yOffset()));
       secondaryBlockView.classList.remove("player");
     }
   }
@@ -29,10 +27,11 @@ class Player {
   }
 
   getLocationId(x_offset, y_offset) {
-    return (this.x_position+x_offset)+""+(this.y_position+y_offset);
+    return (this.position.x+x_offset)+""+(this.position.y+y_offset);
   }
 
   move(direction){
+    // Comment
     switch(direction){
       case "N":
         this.moveN();
@@ -53,136 +52,84 @@ class Player {
     }
     moveNum++;
     updateSidebar();
-    if (player.getLocationId(0,0) == goalId && player.direction.name() == null){
+    if (player.getLocationId(0,0) == goalId && player.position.direction.name == null){
       victory();
     }
 
   }
 
   moveN() {
-    // 5 cases.
-    if ((this.direction.name() == null) && this.x_position > 1 && !(this.findBlockById(this.getLocationId(-1,0)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(-2,0)).classList.contains("dead"))) {
+    // 3 cases.
+    if ((this.position.direction.name == null) && this.position.x > 1 && !(this.findBlockById(this.getLocationId(-1,0)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(-2,0)).classList.contains("dead"))) {
       this.erase();
-      this.x_position--;
-      this.direction = new Direction("N");
+      this.position.x--;
+      this.position.direction = new Direction("N");
       this.display();
-    } else
-    if ((this.direction.name() == "N") && this.x_position > 1 && !(this.findBlockById(this.getLocationId(-1,0)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(-2,0)).classList.contains("dead"))) {
+    } else if ((this.position.direction.name == "N") && this.position.x > 1 &&!(this.findBlockById(this.getLocationId(-2,0)).classList.contains("dead"))) {
       this.erase();
-      this.x_position -= 2;
-      this.direction = new Direction(null);
+      this.position.x -= 2;
+      this.position.direction = new Direction(null);
       this.display();
-    } else
-    if ((this.direction.name() == "S") && this.x_position > 0 && !(this.findBlockById(this.getLocationId(-1,0)).classList.contains("dead"))) {
+    } else if ((this.position.direction.name == "W") && this.position.x > 0 && !(this.findBlockById(this.getLocationId(-1,0)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(-1,-1)).classList.contains("dead"))) {
       this.erase();
-      this.x_position--;
-      this.direction = new Direction(null);
-      this.display();
-    } else
-    if ((this.direction.name() == "E") && this.x_position > 0 && !(this.findBlockById(this.getLocationId(-1,0)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(-1,1)).classList.contains("dead"))) {
-      this.erase();
-      this.x_position--;
-      this.display();
-    } else
-    if ((this.direction.name() == "W") && this.x_position > 0 && !(this.findBlockById(this.getLocationId(-1,0)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(-1,-1)).classList.contains("dead"))) {
-      this.erase();
-      this.x_position--;
+      this.position.x--;
       this.display();
     }
   }
 
   moveS() {
-    // 5 cases.
-    if ((this.direction.name() == null) && this.x_position < 8 && !(this.findBlockById(this.getLocationId(1,0)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(2,0)).classList.contains("dead"))) {
+    // 3 cases.
+    if ((this.position.direction.name == null) && this.position.x < 8 && !(this.findBlockById(this.getLocationId(1,0)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(2,0)).classList.contains("dead"))) {
       this.erase();
-      this.x_position++;
-      this.direction = new Direction("S");
+      this.position.x += 2;
+      this.position.direction = new Direction("N");
       this.display();
-    } else
-    if ((this.direction.name() == "N") && this.x_position < 9 && !(this.findBlockById(this.getLocationId(1,0)).classList.contains("dead"))) {
+    } else if ((this.position.direction.name == "N") && this.position.x < 9 && !(this.findBlockById(this.getLocationId(1,0)).classList.contains("dead"))) {
       this.erase();
-      this.x_position++;
-      this.direction = new Direction(null);
+      this.position.x++;
+      this.position.direction = new Direction(null);
       this.display();
-    } else
-    if ((this.direction.name() == "S") && this.x_position < 8 && !(this.findBlockById(this.getLocationId(1,0)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(2,0)).classList.contains("dead"))) {
+    } else if ((this.position.direction.name == "W") && this.position.x < 9 && !(this.findBlockById(this.getLocationId(1,0)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(1,-1)).classList.contains("dead"))) {
       this.erase();
-      this.x_position += 2;
-      this.direction = new Direction(null);
-      this.display();
-    } else
-    if ((this.direction.name() == "E") && this.x_position < 9 && !(this.findBlockById(this.getLocationId(1,0)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(1,1)).classList.contains("dead"))) {
-      this.erase();
-      this.x_position++;
-      this.display();
-    } else
-    if ((this.direction.name() == "W") && this.x_position < 9 && !(this.findBlockById(this.getLocationId(1,0)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(1,-1)).classList.contains("dead"))) {
-      this.erase();
-      this.x_position++;
+      this.position.x++;
       this.display();
     }
   }
 
   moveE() {
     // 5 cases.
-    if ((this.direction.name() == null) && this.y_position < 8 && !(this.findBlockById(this.getLocationId(0,1)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(0,2)).classList.contains("dead"))) {
+    if ((this.position.direction.name == null) && this.position.y < 8 && !(this.findBlockById(this.getLocationId(0,1)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(0,2)).classList.contains("dead"))) {
       this.erase();
-      this.y_position++;
-      this.direction = new Direction("E");
+      this.position.y += 2;
+      this.position.direction = new Direction("W");
       this.display();
-    } else
-    if ((this.direction.name() == "N") && this.y_position < 9 && !(this.findBlockById(this.getLocationId(0,1)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(-1,1)).classList.contains("dead"))) {
+    } else if ((this.position.direction.name == "N") && this.position.y < 9 && !(this.findBlockById(this.getLocationId(0,1)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(-1,1)).classList.contains("dead"))) {
       this.erase();
-      this.y_position++;
+      this.position.y++;
       this.display();
-    } else
-    if ((this.direction.name() == "S") && this.y_position < 9 && !(this.findBlockById(this.getLocationId(0,1)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(1,1)).classList.contains("dead"))) {
+    } else if ((this.position.direction.name == "W") && this.position.y < 9 && !(this.findBlockById(this.getLocationId(0,1)).classList.contains("dead"))) {
       this.erase();
-      this.y_position++;
-      this.display();
-    } else
-    if ((this.direction.name() == "E") && this.y_position < 8 && !(this.findBlockById(this.getLocationId(0,1)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(0,2)).classList.contains("dead"))) {
-      this.erase();
-      this.y_position += 2;
-      this.direction = new Direction(null);
-      this.display();
-    } else
-    if ((this.direction.name() == "W") && this.y_position < 9 && !(this.findBlockById(this.getLocationId(0,1)).classList.contains("dead"))) {
-      this.erase();
-      this.y_position++;
-      this.direction = new Direction(null);
+      this.position.y++;
+      this.position.direction = new Direction(null);
       this.display();
     }
   }
 
   moveW() {
     // 5 cases.
-    if ((this.direction.name() == null) && this.y_position > 1 && !(this.findBlockById(this.getLocationId(0,-1)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(0,-2)).classList.contains("dead"))) {
+    if ((this.position.direction.name == null) && this.position.y > 1 && !(this.findBlockById(this.getLocationId(0,-1)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(0,-2)).classList.contains("dead"))) {
       this.erase();
-      this.y_position--;
-      this.direction = new Direction("W");
+      this.position.y--;
+      this.position.direction = new Direction("W");
       this.display();
-    } else
-    if ((this.direction.name() == "N") && this.y_position > 0 && !(this.findBlockById(this.getLocationId(0,-1)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(-1,-1)).classList.contains("dead"))) {
+    } else if ((this.position.direction.name == "N") && this.position.y > 0 && !(this.findBlockById(this.getLocationId(0,-1)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(-1,-1)).classList.contains("dead"))) {
       this.erase();
-      this.y_position--;
+      this.position.y--;
       this.display();
-    } else
-    if ((this.direction.name() == "S") && this.y_position > 0 && !(this.findBlockById(this.getLocationId(0,-1)).classList.contains("dead")) &&!(this.findBlockById(this.getLocationId(1,-1)).classList.contains("dead"))) {
+    } else if ((this.position.direction.name == "W") && this.position.y > 1 && !(this.findBlockById(this.getLocationId(0,-1)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(0,-2)).classList.contains("dead"))) {
       this.erase();
-      this.y_position--;
-      this.display();
-    } else
-    if ((this.direction.name() == "E") && this.y_position > 0 && !(this.findBlockById(this.getLocationId(0,-1)).classList.contains("dead"))) {
-      this.erase();
-      this.y_position--;
-      this.direction = new Direction(null);
-      this.display();
-    } else
-    if ((this.direction.name() == "W") && this.y_position > 1 && !(this.findBlockById(this.getLocationId(0,-1)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(0,-2)).classList.contains("dead"))) {
-      this.erase();
-      this.y_position -= 2;
-      this.direction = new Direction(null);
+      this.position.y -= 2;
+      this.position.direction = new Direction(null);
       this.display();
     }
   }

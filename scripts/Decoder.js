@@ -2,13 +2,13 @@
   // Assign Values
   // Repeat // Until all squares have a direction.
     // Assign Directions and Propagate Value
-var pieces = [[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]]];
+var pieces = [[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]]];
 // Takes a blank map and returns a map of correct directions
 var currentMapArray;
 function decode(mapArray) {
   currentMapArray = mapArray;
   // Assign Values to all pieces
-  for (let z=0; z<5; z++) {
+  for (let z=0; z<3; z++) {
     for (let i=0; i<10; i++) {
       for (let j=0; j<10; j++) {
         // Find Goal (Assign 1)
@@ -27,7 +27,7 @@ function decode(mapArray) {
   let itrCount = 0;
   while (itrCount < 50) {
     let dir;
-    for (let z=0; z<5; z++) {
+    for (let z=0; z<3; z++) {
       for (let i=0; i<10; i++) {
         for (let j=0; j<10; j++) {
           // Don't re-assess peices with a direction
@@ -47,115 +47,6 @@ function decode(mapArray) {
   return tempPieces;
 }
 
-function clone(array) {
-  let temp = [[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]]];
-  for (let z=0; z<5; z++) {
-    for (let i=0; i<10; i++) {
-      for (let j=0; j<10; j++) {
-        temp[z][i][j] = array[z][i][j];
-      }
-    }
-  }
-  return temp;
-}
-
-function isLegalPosition(x, y, z) {
-  //console.log("Checking ("+x+", "+y+", "+z+")");
-  // Check Edges
-  if (z == 1 && x == 0) {
-    return false;
-  } else if (z == 2 && y == 9) {
-    return false;
-  } else if (z == 3 && x == 9) {
-    return false;
-  } else if (z == 4 && y == 0) {
-    return false;
-  }
-  // Check dead squares
-  if (z == 0 && currentMapArray[x][y] == "0"){
-    return false;
-  } else if (z == 1 && (currentMapArray[x][y] == "0" || currentMapArray[x-1][y] == "0")) {
-    return false;
-  } else if (z == 2 && (currentMapArray[x][y] == "0" || currentMapArray[x][y+1] == "0")) {
-    return false;
-  } else if (z == 3 && (currentMapArray[x][y] == "0" || currentMapArray[x+1][y] == "0")) {
-    return false;
-  } else if (z == 4 && (currentMapArray[x][y] == "0" || currentMapArray[x][y-1] == "0")) {
-    return false;
-  }
-  //console.log(legal);
-  return true;
-}
-
-function isLegalMove(x,y,z, direction) {
-  let illegalDirections = [];
-  if (z == 0) {
-    if (x == 0 || x == 1) {
-      illegalDirections.push("N");
-    } else if (x == 8 || x == 9) {
-      illegalDirections.push("S");
-    }
-    if (y == 0 || y == 1) {
-      illegalDirections.push("W");
-    } else if (y == 8 || y == 9) {
-      illegalDirections.push("E");
-    }
-  }
-  else if (z == 1) {
-    if (x == 0 || x == 1) {
-      illegalDirections.push("N");
-    } else if (x == 9) {
-      illegalDirections.push("S");
-    }
-    if (y == 0) {
-      illegalDirections.push("W");
-    } else if (y == 9) {
-      illegalDirections.push("E");
-    }
-  }
-  else if (z == 2) {
-    if (x == 0) {
-      illegalDirections.push("N");
-    } else if (x == 9) {
-      illegalDirections.push("S");
-    }
-    if (y == 0) {
-      illegalDirections.push("W");
-    } else if (y == 9 || y == 8) {
-      illegalDirections.push("E");
-    }
-  }
-  else if (z == 3) {
-    if (x == 0) {
-      illegalDirections.push("N");
-    } else if (x == 9 || x == 8) {
-      illegalDirections.push("S");
-    }
-    if (y == 0) {
-      illegalDirections.push("W");
-    } else if (y == 9) {
-      illegalDirections.push("E");
-    }
-  }
-  else if (z == 4) {
-    if (x == 0) {
-      illegalDirections.push("N");
-    } else if (x == 9) {
-      illegalDirections.push("S");
-    }
-    if (y == 0 || y == 1) {
-      illegalDirections.push("W");
-    } else if (y == 9) {
-      illegalDirections.push("E");
-    }
-  }
-
-  if (illegalDirections.includes(direction)) {
-    return false;
-  }
-  return true;
-}
-
 function getCoordsFrom(x,y,z,direction) {
   //console.log("Starting Coords: ("+x+", "+y+", "+z+", "+direction+")");
   let coords = [-1,-1,-1];
@@ -163,11 +54,11 @@ function getCoordsFrom(x,y,z,direction) {
     if (direction == "N") {
       coords = [x-1, y, 1];
     } else if (direction == "E") {
-      coords = [x, y+1, 2];
+      coords = [x, y+2, 2];
     } else if (direction == "S") {
-      coords = [x+1, y, 3];
+      coords = [x+2, y, 1];
     } else if (direction == "W") {
-      coords = [x, y-1, 4];
+      coords = [x, y-1, 2];
     }
   } else if (z == 1) {
     if (direction == "N") {
@@ -183,29 +74,9 @@ function getCoordsFrom(x,y,z,direction) {
     if (direction == "N") {
       coords = [x-1, y, 2];
     } else if (direction == "E") {
-      coords = [x, y+2, 0];
-    } else if (direction == "S") {
-      coords = [x+1, y, 2];
-    } else if (direction == "W") {
-      coords = [x, y-1, 0];
-    }
-  } else if (z == 3) {
-    if (direction == "N") {
-      coords = [x-1, y, 0];
-    } else if (direction == "E") {
-      coords = [x, y+1, 3];
-    } else if (direction == "S") {
-      coords = [x+2, y, 0];
-    } else if (direction == "W") {
-      coords = [x, y-1, 3];
-    }
-  } else if (z == 4) {
-    if (direction == "N") {
-      coords = [x-1, y, 4];
-    } else if (direction == "E") {
       coords = [x, y+1, 0];
     } else if (direction == "S") {
-      coords = [x+1, y, 4];
+      coords = [x+1, y, 2];
     } else if (direction == "W") {
       coords = [x, y-2, 0];
     }
@@ -263,4 +134,79 @@ function getRandDirection(x, y, z, north, east, south, west) {
   } else {
     return directions[getRandInt(0,directions.length-1)];
   }
+}
+
+function clone(array) {
+  let temp = [[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]]];
+  for (let z=0; z<3; z++) {
+    for (let i=0; i<10; i++) {
+      for (let j=0; j<10; j++) {
+        temp[z][i][j] = array[z][i][j];
+      }
+    }
+  }
+  return temp;
+}
+
+function isLegalPosition(x, y, z) {
+  // Check Edges
+  if (z == 1 && x == 0) {
+    return false;
+  } else if (z == 2 && y == 9) {
+    return false;
+  }
+  // Check dead squares
+  if (z == 0 && currentMapArray[x][y] == "0") {
+    return false;
+  } else if (z == 1 && (currentMapArray[x][y] == "0" || currentMapArray[x-1][y] == "0")) {
+    return false;
+  } else if (z == 2 && (currentMapArray[x][y] == "0" || currentMapArray[x][y-1] == "0")) {
+    return false;
+  }
+  return true;
+}
+
+function isLegalMove(x,y,z, direction) {
+  let illegalDirections = [];
+  if (z == 0) {
+    if (x == 0 || x == 1) {
+      illegalDirections.push("N");
+    } else if (x == 8 || x == 9) {
+      illegalDirections.push("S");
+    }
+    if (y == 0 || y == 1) {
+      illegalDirections.push("W");
+    } else if (y == 8 || y == 9) {
+      illegalDirections.push("E");
+    }
+  }
+  else if (z == 1) {
+    if (x == 0 || x == 1) {
+      illegalDirections.push("N");
+    } else if (x == 9) {
+      illegalDirections.push("S");
+    }
+    if (y == 0) {
+      illegalDirections.push("W");
+    } else if (y == 9) {
+      illegalDirections.push("E");
+    }
+  }
+  else if (z == 2) {
+    if (x == 0) {
+      illegalDirections.push("N");
+    } else if (x == 9) {
+      illegalDirections.push("S");
+    }
+    if (y == 0 || y == 1) {
+      illegalDirections.push("W");
+    } else if (y == 9) {
+      illegalDirections.push("E");
+    }
+  }
+
+  if (illegalDirections.includes(direction)) {
+    return false;
+  }
+  return true;
 }

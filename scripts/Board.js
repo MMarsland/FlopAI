@@ -16,7 +16,19 @@ class Board {
           block = new Block(i+""+j, j, i, "goal");
         } else if (this.array[i][j] == 3) {
           block = new Block(i+""+j, j, i, "regular");
-          playerStartLocation = [i,j];
+          playerStartPosition = new Position(i,j,null);
+          if (i != 0){
+            if (this.array[i-1][j] == 4) {
+              playerStartPosition = new Position(i,j,"N");
+            }
+          }
+          if (j != 0) {
+            if (this.array[i][j-1] == 4) {
+              playerStartPosition = new Position(i,j,"W");
+            }
+          }
+        } else {
+          block = new Block(i+""+j, j, i, "regular");
         }
         this.blocks[i][j] = block;
       }

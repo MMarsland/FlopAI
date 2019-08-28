@@ -3,11 +3,12 @@ let player;
 let goalId;
 let map;
 let level;
-let playerStartLocation;
+let playerStartPosition;
 let currentView = "home";
 let aIRunning = false;
 let moveNum = 0;
 let decodedMapDirections;
+let brain = new Brain();
 
 // Nural Network Functions
 function download(filename, text) {
@@ -28,14 +29,10 @@ function readBrain() {
   if (input.files && input.files[0]) {
       var reader = new FileReader();
       reader.onload = function(){
-        decodeBrain(reader.result);
+        brain.encodeBrain(reader.result);
       };
       reader.readAsText(input.files[0]);
   }
-}
-
-function decodeBrain(text) {
-  console.log(text);
 }
 
 async function runAI() {
@@ -54,7 +51,7 @@ async function runAI() {
     // Make Move
     moveAI(chosenMove);
     // Wait for the right time
-    await sleep(1);
+    await sleep(100);
     // Repeat
   }
 }
@@ -116,7 +113,10 @@ function pickMove() {
 
 
   // TEMP 2: Use the Map Decoder to determine the best move based on current position!
-  direction = getBestNextDirection(player.x_position, player.y_position, player.direction.getNumber());
+  //direction = getBestNextDirection(player.position);
+
+  // Real : use the Nural Network to pick a direction
+  direction = brain.getMove(brain.getOutputs(getInputs()));
 
 
   // Return Move
@@ -125,16 +125,27 @@ function pickMove() {
 
 function getRandInt(min, max) {
     let realMax = max+1;
-    var random = (Math.floor(Math.random() * (realMax-min)) + min);
+    let random = (Math.floor(Math.random() * (realMax-min)) + min);
     return random;
 }
 
-function getBestNextDirection(x,y,z) {
-  let directions = decodedMapDirections;
-  return directions[z][x][y];
+function getRandPMNormal() {
+  let random = (Math.random()*2 - 1);
+  return random;
 }
 
+function getBestNextDirection(position) {
+  let directions = decodedMapDirections;
+  return directions[position.direction.getNumber()][position.x][position.y];
+}
 
+function copy1DArray(array) {
+  let temp = [];
+  for (let i=0;i<array.length;i++){
+    temp[i] = array[i];
+  }
+  return temp;
+}
 
 
 
@@ -157,7 +168,7 @@ function updateSidebar() {
 // Regular Game Functions
 function keyPressed(keyCode) {
   //comment
-  //console.log(keyCode);
+  console.log(keyCode);
   if (keyCode == 87 || keyCode == 38 && currentView == "board") { // W
     player.move("N");
   } else if (keyCode == 65 || keyCode == 37 && currentView == "board") { // A
@@ -172,6 +183,12 @@ function keyPressed(keyCode) {
     back();
   } else if (keyCode == 77 && currentView != "home") { // M
     saveMap(getMapArray());
+  } else if (keyCode == 78 && currentView != "home") { // M
+    brain.saveBrain();
+  } else if (keyCode == 84 && currentView != "home") { // M
+    testBrain();
+  } else if (keyCode == 89 && currentView != "home") { // M
+    brain.randomizeBrain();
   } else if (keyCode == 71 && currentView == "board") { // G
     if (!aIRunning) {
       aIRunning = true;
@@ -190,7 +207,7 @@ function victory() {
 
 function reset() {
   player.erase();
-  player = new Player(playerStartLocation[0],playerStartLocation[1], new Direction(null));
+  player = new Player(playerStartPosition.x,playerStartPosition.y,playerStartPosition.direction.name);
   player.display();
   changeViewTo("board");
   moveNum = 0;
@@ -267,7 +284,7 @@ function selectLevel(level) {
   board = new Board(map);
   board.populate();
   board.display();
-  player = new Player(playerStartLocation[0], playerStartLocation[1], new Direction(null));
+  player = new Player(playerStartPosition.x,playerStartPosition.y,playerStartPosition.direction.name);
   player.display();
   goalId = document.getElementsByClassName("goal")[0].getAttribute("id");
   changeViewTo("board");
