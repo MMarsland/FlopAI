@@ -1,49 +1,62 @@
 class Brain {
   constructor() {
     // Gonna Start with 100 inputs, 64, 32, 16, 8, 4 Outputs
+    this.name = "";
+    this.traits = "";
     this.biases = [];
     this.wirings = [];
     this.outputs;
     this.randomizeBrain();
+
   }
 
   randomizeBrain(){
     let numWirings = 100 * 8 + 8 * 4;
     let numbiases = 8 + 4;
     for (let i = 0; i<numWirings;i++) {
-      this.wirings[i] = getRandPMNormal();
+      this.wirings[i] = getRandNormal();
     }
     for (let i=0;i<numbiases;i++) {
-      this.biases[i] = getRandPMNormal();
+      this.biases[i] = 0;//getRandNormal();
     }
+    this.name = getRandomName();
+    this.traits = getRandomTraitsText();
+    console.log("Brain Randomized");
   }
 
-  saveBrain() {
-    let brainText = "Brain:\n";
-    brainText += "Neurons:\n[";
+  getBrainText() {
+    let text = "Brain:\n";
+    text += "Name: "+this.name+"\n";
+    text += "Traits: "+this.traits+"\n";
+    text += "Neurons:\n[";
     for (let i=0; i<this.biases.length;i++){
-      brainText += this.biases[i] + "";
-      brainText += (i == this.biases.length-1)? "]\n" : ",";
+      text += this.biases[i] + "";
+      text += (i == this.biases.length-1)? "]\n" : ",";
     }
-    brainText += "Wirings:\n[";
+    text += "Wirings:\n[";
     for (let i=0; i<this.wirings.length;i++){
-      brainText += this.wirings[i] + "";
-      brainText += (i == this.wirings.length-1)? "]" : ",";
+      text += this.wirings[i] + "";
+      text += (i == this.wirings.length-1)? "]\n" : ",";
     }
-    download("Brain", brainText);
+    return text;
   }
 
   encodeBrain(text) {
-    let neuronText = text.substring(text.indexOf("[")+1, text.indexOf("]"));
-    let remainderText = text.substring(text.indexOf("Wirings:"));
-    let wiringsText = remainderText.substring(remainderText.indexOf("[")+1, remainderText.indexOf("]"));
-
+    let brainText = text.substring(text.indexOf("Brain:"));
+    let nameText = brainText.substring(brainText.indexOf("Name:"));
+    this.name = nameText.substring(6, nameText.indexOf("\n"));
+    let traitsText = brainText.substring(brainText.indexOf("Traits:"));
+    this.traits = traitsText.substring(8, traitsText.indexOf("\n"));
+    let neuronText = brainText.substring(brainText.indexOf("Neurons:"));
+    let neuronString = neuronText.substring(neuronText.indexOf("[")+1, neuronText.indexOf("]"));
+    let wiringsText = brainText.substring(brainText.indexOf("Wirings:"));
+    let wiringsString = wiringsText.substring(wiringsText.indexOf("[")+1, wiringsText.indexOf("]"));
     //Add Neurons to Col1
-    let neuronVals = neuronText.split(",");
+    let neuronVals = neuronString.split(",");
     for (let i=0;i<neuronVals.length;i++){
       this.biases[i] = neuronVals[i];
     }
-    let wiringsVals = wiringsText.split(",");
+    let wiringsVals = wiringsString.split(",");
     for (let i=0;i<wiringsVals.length;i++){
       this.wirings[i] = wiringsVals[i];
     }
@@ -70,7 +83,7 @@ class Brain {
     let inputMatrix = [];
     // Create Inputs Matrix
     for (let i=0; i<100; i++){
-      inputMatrix[i] = tanh(inputs[i]);
+      inputMatrix[i] = sigmoid(inputs[i]);
     }
 
     //Create Bias Matrix
@@ -83,7 +96,7 @@ class Brain {
     //console.log(firstBiasMatrix);
     // Calculate hidden layer 1 values
     let hiddenLayer1Matrix = [];
-    hiddenLayer1Matrix = tanhMatrix(addMatrices(multiplyMatrices(firstWiringsMatrix, inputMatrix), firstBiasMatrix));
+    hiddenLayer1Matrix = sigmoidMatrix(addMatrices(sigmoidMatrix(multiplyMatrices(firstWiringsMatrix, inputMatrix)), firstBiasMatrix));
     console.log("hiddenLayer1Matrix:");
     console.log(hiddenLayer1Matrix);
     console.log("First Value:");
@@ -104,8 +117,8 @@ class Brain {
         secondWiringsMatrix[i][j] = this.wirings[(800 + (i*8+j))];
       }
     }
-    //console.log("secondWiringsMatrix:");
-    //console.log(secondWiringsMatrix);
+    console.log("secondWiringsMatrix:");
+    console.log(secondWiringsMatrix);
 
     //Create Bias Matrix
     let secondBiasMatrix = [];
@@ -113,11 +126,11 @@ class Brain {
     for (let i=0; i<4; i++){
       secondBiasMatrix[i] = this.biases[(8 + i)];
     }
-    //console.log("secondBiasMatrix:");
-    //console.log(secondBiasMatrix);
+    console.log("secondBiasMatrix:");
+    console.log(secondBiasMatrix);
     // Calculate output layer values
     let outputMatrix = [];
-    outputMatrix = sigmoidMatrix(addMatrices(multiplyMatrices(secondWiringsMatrix, hiddenLayer1Matrix), secondBiasMatrix));
+    outputMatrix = sigmoidMatrix(addMatrices(sigmoidMatrix(multiplyMatrices(secondWiringsMatrix, hiddenLayer1Matrix)), secondBiasMatrix));
     console.log("outputMatrix:");
     console.log(outputMatrix);
     console.log(Math.max(...outputMatrix));
@@ -143,6 +156,9 @@ class Brain {
 }
 
 function multiplyMatrices(m1, m2) {
+  console.log("MULTIPLYING:");
+  console.log(m1);
+  console.log(m2);
   var result = [];
   let sum;
   for (let i=0;i<m1.length;i++) {
@@ -152,14 +168,21 @@ function multiplyMatrices(m1, m2) {
     }
     result[i] = sum;
   }
+  console.log("RESULT:");
+  console.log(result);
   return result;
 }
 
 function addMatrices(a, b){
+  console.log("ADDING:");
+  console.log(a);
+  console.log(b);
   let result = [];
   for (let i=0;i<a.length;i++) {
-    result[i] = a[i] + b[i];
+    result[i] = a[i]*1 + b[i]*1;
   }
+  console.log("RESULT:");
+  console.log(result);
   return result;
 }
 
@@ -194,12 +217,27 @@ function getInputs() {
   let inputsMatrix = [];
   for (let i=0;i<10;i++) {
     for (let j=0;j<10;j++) {
-      inputsMatrix[(i*10+j)] = mapArray[i][j];
+      inputsMatrix[(i*10+j)] = translateMapValue(mapArray[i][j]);
     }
   }
   console.log("InputsMatrix:");
   console.log(inputsMatrix);
   return inputsMatrix;
+}
+
+function translateMapValue(mapVal) {
+  switch (mapVal) {
+    case 1:
+      return 0.2;
+    case 2:
+      return 0.4;
+    case 3:
+      return 0.8;
+    case 4:
+      return 0.6;
+    default:
+      return 0;
+  }
 }
 
 function testBrain() {

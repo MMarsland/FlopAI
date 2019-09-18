@@ -5,6 +5,7 @@ class Board {
   }
 
   populate() {
+    this.clear();
     for (let i=0; i<10; i++) {
       for (let j=0; j<10; j++) {
         let block;
@@ -36,7 +37,7 @@ class Board {
   }
 
   clear() {
-    this.blocks = [];
+    this.blocks = [[],[],[],[],[],[],[],[],[],[]];
     while (this.getView().hasChildNodes()) {
       this.getView().removeChild(this.getView().firstChild);
     }

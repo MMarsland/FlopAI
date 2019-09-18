@@ -2,6 +2,7 @@ let board;
 let player;
 let goalId;
 let map;
+let names = map5;
 let level;
 let playerStartPosition;
 let currentView = "home";
@@ -9,6 +10,11 @@ let aIRunning = false;
 let moveNum = 0;
 let decodedMapDirections;
 let brain = new Brain();
+let sessionName = "";
+let gameSessionReady = false;
+let smartMode = false;
+
+
 
 // Nural Network Functions
 function download(filename, text) {
@@ -24,15 +30,20 @@ function download(filename, text) {
     document.body.removeChild(element);
 }
 
-function readBrain() {
-  let input = document.getElementById("brainInput");
+function readGameFile() {
+  let input = document.getElementById("gameFileInput");
   if (input.files && input.files[0]) {
       var reader = new FileReader();
       reader.onload = function(){
-        brain.encodeBrain(reader.result);
+        processGameFile(reader.result);
       };
       reader.readAsText(input.files[0]);
   }
+}
+
+function processGameFile(gameText) {
+  brain.encodeBrain(gameText);
+  readyGameSession();
 }
 
 async function runAI() {
@@ -45,7 +56,7 @@ async function runAI() {
   decodedMapDirections = decode(getMapArray());
   console.log(decodedMapDirections);
 
-  while(aIRunning) {
+  while(aIRunning && currentView == "board") {
     // Decide On move
     let chosenMove = pickMove();
     // Make Move
@@ -54,6 +65,7 @@ async function runAI() {
     await sleep(100);
     // Repeat
   }
+  aIRunning = false;
 }
 
 function sleep(ms) {
@@ -111,12 +123,16 @@ function pickMove() {
       break;
   } */
 
+  if (smartMode) {
+    // TEMP 2: Use the Map Decoder to determine the best move based on current position!
+    direction = getBestNextDirection(player.position);
+  } else {
+    // Real : use the Nural Network to pick a direction
+    direction = brain.getMove(brain.getOutputs(getInputs()));
+  }
 
-  // TEMP 2: Use the Map Decoder to determine the best move based on current position!
-  //direction = getBestNextDirection(player.position);
 
-  // Real : use the Nural Network to pick a direction
-  direction = brain.getMove(brain.getOutputs(getInputs()));
+
 
 
   // Return Move
@@ -134,6 +150,11 @@ function getRandPMNormal() {
   return random;
 }
 
+function getRandNormal() {
+  let random = (Math.random());
+  return random;
+}
+
 function getBestNextDirection(position) {
   let directions = decodedMapDirections;
   return directions[position.direction.getNumber()][position.x][position.y];
@@ -147,25 +168,21 @@ function copy1DArray(array) {
   return temp;
 }
 
-
-
-
-
-
-
-
-
-
-
 // Display Functions
 function updateSidebar() {
   // Update Move count
   document.getElementById("moveNum").innerHTML = ("Moves: "+moveNum);
+  document.getElementById("brainName").innerHTML = "Name: "+brain.name;
+  document.getElementById("brainTraits").innerHTML = "Traits: "+brain.traits;
 }
 
-
-
 // Regular Game Functions
+document.onkeydown = function (e) {
+    e = e || window.event;
+    // use e.keyCode
+    keyPressed(e.keyCode);
+};
+
 function keyPressed(keyCode) {
   //comment
   console.log(keyCode);
@@ -179,16 +196,25 @@ function keyPressed(keyCode) {
     player.move("E");
   } else if (keyCode == 82 && currentView != "home") { // R
     reset();
-  } else if (keyCode == 66 && currentView != "home") { // B
+  } else if (keyCode == 66) { // B
     back();
   } else if (keyCode == 77 && currentView != "home") { // M
     saveMap(getMapArray());
-  } else if (keyCode == 78 && currentView != "home") { // M
-    brain.saveBrain();
-  } else if (keyCode == 84 && currentView != "home") { // M
-    testBrain();
-  } else if (keyCode == 89 && currentView != "home") { // M
+  } else if (keyCode == 80 && currentView != "home") { // P
+    saveGame();
+  } else if (keyCode == 84 && currentView != "home") { // T
+    testBrain(); // In Brain
+  } else if (keyCode == 67 && currentView != "home") { // C "CheatMode"
+    if (!smartMode) {
+      smartMode = true;
+    } else {
+      smartMode = false;
+    }
+  } else if (keyCode == 89 && currentView != "home") { // Y
     brain.randomizeBrain();
+    if (currentView == "board") {
+        updateSidebar();
+    }
   } else if (keyCode == 71 && currentView == "board") { // G
     if (!aIRunning) {
       aIRunning = true;
@@ -216,36 +242,36 @@ function reset() {
 
 function back() {
   // Back to home
-  changeViewTo("home");
-  board.clear();
+  //Find current getLocation and go back based on that
+  // victory&board -> home -> welcome -> N/A
+  changeViewTo(getBackView(currentView));
+}
+
+function getBackView(view) {
+  let backView;
+  if (view == "board" || view == "victory") {
+    backView = "home";
+  } else {
+    backView = "welcome";
+  }
+  return backView;
+}
+
+function getView() {
+  return currentView;
 }
 
 function changeViewTo(viewName) {
-  switch (viewName) {
-    case "home":
-      reset();
-      getVictoryView().classList.add("hidden");
-      getBoardView().classList.add("hidden");
-      getHomeView().classList.remove("hidden");
-      currentView = "home";
-      break;
-    case "board":
-      getVictoryView().classList.add("hidden");
-      getHomeView().classList.add("hidden");
-      getBoardView().classList.remove("hidden");
-      currentView = "board";
-      break;
-    case "victory":
-      getBoardView().classList.add("hidden");
-      getHomeView().classList.add("hidden");
-      getVictoryView().classList.remove("hidden");
-      currentView = "victory";
-      break;
-    default:
-      console.log("ERROR!");
-      alert("ERROR!");
-      break;
+  // Add hidden to all views
+  //Remove Hidden from desired view
+  // set the currentView variable
+  let frames = document.getElementsByClassName("frame");
+  for (let i=0; i<frames.length; i++) { let frame = frames[i];
+    frame.classList.add("hidden");
   }
+  let view = document.getElementById(viewName);
+  view.classList.remove("hidden");
+  currentView = viewName;
 }
 
 function getBoardView() {
@@ -290,12 +316,6 @@ function selectLevel(level) {
   changeViewTo("board");
   reset();
 }
-
-document.onkeydown = function (e) {
-    e = e || window.event;
-    // use e.keyCode
-    keyPressed(e.keyCode);
-};
 
 function changeColor(event) {
   event.preventDefault();
@@ -355,4 +375,75 @@ function saveMap(mapArray) {
   mapText += "];";
   console.log(mapText);
   download("map", mapText);
+}
+
+function startDefault() {
+  // Add more here later to upload defaults
+  if (confirm("Are you sure you want to start a new game file?")) {
+    brain.randomizeBrain();
+    readyGameSession();
+  }
+}
+
+function readyGameSession() {
+  gameSessionReady = true;
+  document.getElementById("play").classList.remove("disabledPlay");
+  document.getElementById("play").classList.add("pulse");
+}
+
+function play() {
+  if (gameSessionReady) {
+    changeViewTo("home");
+  }
+}
+
+function saveGame() {
+  if (sessionName == "") {
+    saveAs();
+  } else {
+    saveGameFile(sessionName);
+  }
+}
+
+function saveAs() {
+  let name = prompt("What would you like to save your game as?", "BestGame");
+  if (name == null) { // Null or empty str
+    return;
+  }
+  if (name == "") {
+    name = "gameFile";
+  }
+  saveGameFile(name);
+  sessionName = name;
+}
+
+function saveGameFile(name) {
+  let text = "FlopAI Game File:\n"
+  text += "Name: "+name+"\n";
+  text += brain.getBrainText();
+  download(name, text);
+}
+
+function getRandomName() {
+  let nameKey = getRandInt(0, namesList.length-1);
+  return namesList[nameKey];
+}
+
+function getRandomTrait() {
+  let adjectiveKey = getRandInt(0, adjectivesList.length-1);
+  let adj = adjectivesList[adjectiveKey]
+  return adj.charAt(0).toUpperCase() + adj.slice(1);
+}
+
+function getRandomTraitsText() {
+  let numTraits = getRandInt(1,3);
+  let traits = "";
+  for (let i=0;i<numTraits;i++) {
+    traits += getRandomTrait() + ", ";
+  }
+  return traits.substring(0, traits.length-2);
+}
+
+function startUp() {
+  readyGameSession(); // Initalize the game with a fresh start
 }
