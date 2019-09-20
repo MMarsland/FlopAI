@@ -43,7 +43,14 @@ function readGameFile() {
 
 function processGameFile(gameText) {
   brain.encodeBrain(gameText);
+  tempGameFileUpload(gameText);
   readyGameSession();
+}
+
+function tempGameFileUpload(gameText) {
+    let nameText = gameText.substring(gameText.indexOf("Name:"));
+    let name = nameText.substring(6, nameText.indexOf("\n"));
+    setSessionName(name);
 }
 
 async function runAI() {
@@ -381,12 +388,12 @@ function startDefault() {
   // Add more here later to upload defaults
   if (confirm("Are you sure you want to start a new game file?")) {
     brain.randomizeBrain();
+    setSessionName("Default");
     readyGameSession();
   }
 }
 
 function readyGameSession() {
-  gameSessionReady = true;
   document.getElementById("play").classList.remove("disabledPlay");
   document.getElementById("play").classList.add("pulse");
 }
@@ -414,7 +421,13 @@ function saveAs() {
     name = "gameFile";
   }
   saveGameFile(name);
+  setSessionName(name);
+}
+
+function setSessionName(name) {
+  gameSessionReady = true;
   sessionName = name;
+  document.getElementById("sessionName").innerHTML = "Session Name: "+name;
 }
 
 function saveGameFile(name) {
@@ -445,5 +458,6 @@ function getRandomTraitsText() {
 }
 
 function startUp() {
+  setSessionName("Default");
   readyGameSession(); // Initalize the game with a fresh start
 }

@@ -32,9 +32,10 @@
             <h3 class="welcomeOption" onclick="document.getElementById('gameFileInput').click()">Upload a Game File</h3>
             <input id="gameFileInput" class="hidden" type="file" onchange="readGameFile()"/>
 
-            <h3  class="welcomeOption" onclick="startDefault()">Start Fresh</h3>
+            <h3  class="welcomeOption" onclick="startDefault()">Start New Game File</h3>
             <h3  class="welcomeOption" onclick="saveGame()">Quick Save</h3>
             <h3  class="welcomeOption" onclick="saveAs()">Save As</h3>
+            <h3  id="sessionName" >Session Name: N/A</h3>
 
           </div>
           <div id="home" class="hidden frame">
