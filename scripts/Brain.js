@@ -153,89 +153,32 @@ class Brain {
       alert("ERROR (Index)");
     }
   }
-}
 
-function multiplyMatrices(m1, m2) {
-  console.log("MULTIPLYING:");
-  console.log(m1);
-  console.log(m2);
-  var result = [];
-  let sum;
-  for (let i=0;i<m1.length;i++) {
-    sum = 0;
-    for(let j=0;j<m1[i].length;j++) {
-      sum += m2[j]*m1[i][j];
+  getInputs() {
+    let mapArray = createMapArray();
+    let inputsMatrix = [];
+    for (let i=0;i<10;i++) {
+      for (let j=0;j<10;j++) {
+        inputsMatrix[(i*10+j)] = translateMapValue(mapArray[i][j]);
+      }
     }
-    result[i] = sum;
+    console.log("InputsMatrix:");
+    console.log(inputsMatrix);
+    return inputsMatrix;
   }
-  console.log("RESULT:");
-  console.log(result);
-  return result;
-}
 
-function addMatrices(a, b){
-  console.log("ADDING:");
-  console.log(a);
-  console.log(b);
-  let result = [];
-  for (let i=0;i<a.length;i++) {
-    result[i] = a[i]*1 + b[i]*1;
-  }
-  console.log("RESULT:");
-  console.log(result);
-  return result;
-}
-
-function sigmoid(x) {
-  // 1 / (1 + e^-x)
-  return (1 / (1 + Math.E ** (-x)));
-}
-
-function sigmoidMatrix(matrix) {
-  let newMatrix = [];
-  for (let i=0;i<matrix.length;i++){
-    newMatrix[i] = sigmoid(matrix[i]);
-  }
-  return newMatrix;
-}
-
-function tanh(x) {
-  //(e^(2z)-1)/(e^(2z)+1),
-  return ((Math.E**(2*x)-1)/(Math.E**(2*x)+1));
-}
-
-function tanhMatrix(matrix) {
-  let newMatrix = [];
-  for (let i=0;i<matrix.length;i++){
-    newMatrix[i] = tanh(matrix[i]);
-  }
-  return newMatrix;
-}
-
-function getInputs() {
-  let mapArray = createMapArray();
-  let inputsMatrix = [];
-  for (let i=0;i<10;i++) {
-    for (let j=0;j<10;j++) {
-      inputsMatrix[(i*10+j)] = translateMapValue(mapArray[i][j]);
+  translateMapValue(mapVal) {
+    switch (mapVal) {
+      case 1:
+        return 0.2;
+      case 2:
+        return 0.4;
+      case 3:
+        return 0.8;
+      case 4:
+        return 0.6;
+      default:
+        return 0;
     }
-  }
-  console.log("InputsMatrix:");
-  console.log(inputsMatrix);
-  return inputsMatrix;
-}
-
-function translateMapValue(mapVal) {
-  switch (mapVal) {
-    case 1:
-      return 0.2;
-    case 2:
-      return 0.4;
-    case 3:
-      return 0.8;
-    case 4:
-      return 0.6;
-    default:
-      return 0;
   }
 }

@@ -55,7 +55,6 @@ class App {
 
 
 
-
   saveGame() {
     if (this.sessionName == "") {
       this.saveAs();
@@ -73,25 +72,45 @@ class App {
       name = "gameFile";
     }
     this.saveGameFile(name);
-    this.sessionName = name;
+    this.setSessionName(name);
   }
 
   saveGameFile(name) {
     let text = "FlopAI Game File:\n"
     text += "Name: "+name+"\n";
     text += ai.brain.getBrainText();
+    text += mapManager.getMapText();
     System.download(name, text);
   }
 
   readGameFile() {
     console.log("Should read the file and do something with it!");
-    System.readFile("gameFileInput");
+    System.readFile("gameFileInput", app.parseGameText);
+  }
+
+  parseGameText(text) {
+    // Parse Game Text
+    //Session Names
+    app.readSessionName(text);
+    //Brain
+    ai.brain.encodeBrain(text);
+    //Maps
+  }
+
+  readSessionName(text) {
+    let nameText = text.substring(text.indexOf("Name:"));
+    this.setSessionName(nameText.substring(6, nameText.indexOf("\n")));
+  }
+
+  setSessionName(name) {
+    this.sessionName = name;
+    document.getElementById("sessionName").innerHTML = "Session Name: "+name;
   }
 
   resetToDefault() {
     // Add more here later to upload defaults
     if (confirm("Are you sure you want to start a new game file?")) {
-      this.sessionName = "default";
+      this.setSessionName("Default");
     }
   }
 }

@@ -14,12 +14,12 @@ class System {
       document.body.removeChild(element);
   }
 
-  static readFile(inputId) {
+  static readFile(inputId, callback) {
     let input = document.getElementById(inputId);
     if (input.files && input.files[0]) {
         var reader = new FileReader();
-        reader.onload = () => {
-          return reader.result;
+        reader.onload = function(e) {
+          callback(reader.result);
         };
         reader.readAsText(input.files[0]);
     }
@@ -71,5 +71,62 @@ class System {
       traits += System.getRandomTrait() + ", ";
     }
     return traits.substring(0, traits.length-2);
+  }
+
+  static multiplyMatrices(m1, m2) {
+    console.log("MULTIPLYING:");
+    console.log(m1);
+    console.log(m2);
+    var result = [];
+    let sum;
+    for (let i=0;i<m1.length;i++) {
+      sum = 0;
+      for(let j=0;j<m1[i].length;j++) {
+        sum += m2[j]*m1[i][j];
+      }
+      result[i] = sum;
+    }
+    console.log("RESULT:");
+    console.log(result);
+    return result;
+  }
+
+  static addMatrices(a, b){
+    console.log("ADDING:");
+    console.log(a);
+    console.log(b);
+    let result = [];
+    for (let i=0;i<a.length;i++) {
+      result[i] = a[i]*1 + b[i]*1;
+    }
+    console.log("RESULT:");
+    console.log(result);
+    return result;
+  }
+
+  static sigmoid(x) {
+    // 1 / (1 + e^-x)
+    return (1 / (1 + Math.E ** (-x)));
+  }
+
+  static sigmoidMatrix(matrix) {
+    let newMatrix = [];
+    for (let i=0;i<matrix.length;i++){
+      newMatrix[i] = sigmoid(matrix[i]);
+    }
+    return newMatrix;
+  }
+
+  static tanh(x) {
+    //(e^(2z)-1)/(e^(2z)+1),
+    return ((Math.E**(2*x)-1)/(Math.E**(2*x)+1));
+  }
+
+  static tanhMatrix(matrix) {
+    let newMatrix = [];
+    for (let i=0;i<matrix.length;i++){
+      newMatrix[i] = tanh(matrix[i]);
+    }
+    return newMatrix;
   }
 }

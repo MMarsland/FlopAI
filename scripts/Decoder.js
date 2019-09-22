@@ -217,5 +217,4 @@ class Decoder {
     }
     return true;
   }
-
 }

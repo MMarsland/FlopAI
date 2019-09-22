@@ -59,6 +59,7 @@ class AI {
     // Use Nural Network to decide on move
 
     // Temporary (Just Move Randomly!)
+    /*
     do {
       let moveInt = System.getRandInt(0,3);
       switch(moveInt) {
@@ -80,8 +81,8 @@ class AI {
           break;
       }
     } while (!this.decoder.isLegalMove(game.player.position.x, game.player.position.y, game.player.position.direction.getNumber(), direction));
+    */
 
-    /*
     if (this.cheatMode) {
       // TEMP 2: Use the Map Decoder to determine the best move based on current position!
       direction = this.getBestNextDirection(game.player.position);
@@ -89,7 +90,6 @@ class AI {
       // Real : use the Nural Network to pick a direction
       direction = this.brain.getMove(this.brain.getOutputs(getInputs()));
     }
-    */
 
     // Return Move
     return direction;
