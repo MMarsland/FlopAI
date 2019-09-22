@@ -14,13 +14,13 @@ class Brain {
     let numWirings = 100 * 8 + 8 * 4;
     let numbiases = 8 + 4;
     for (let i = 0; i<numWirings;i++) {
-      this.wirings[i] = getRandNormal();
+      this.wirings[i] = System.getRandNormal();
     }
     for (let i=0;i<numbiases;i++) {
       this.biases[i] = 0;//getRandNormal();
     }
-    this.name = getRandomName();
-    this.traits = getRandomTraitsText();
+    this.name = System.getRandomName();
+    this.traits = System.getRandomTraitsText();
     console.log("Brain Randomized");
   }
 
@@ -213,7 +213,7 @@ function tanhMatrix(matrix) {
 }
 
 function getInputs() {
-  let mapArray = getMapArray();
+  let mapArray = createMapArray();
   let inputsMatrix = [];
   for (let i=0;i<10;i++) {
     for (let j=0;j<10;j++) {
@@ -238,9 +238,4 @@ function translateMapValue(mapVal) {
     default:
       return 0;
   }
-}
-
-function testBrain() {
-  console.log("Testing Brain");
-  console.log("Chosen Move: "+brain.getMove(brain.getOutputs(getInputs())));
 }

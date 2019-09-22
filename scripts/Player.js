@@ -3,7 +3,6 @@ class Player {
     this.position = new Position(x,y,direction);
   }
 
-
   display() {
     let mainBlockView = this.findBlockById(this.getLocationId(0,0));
     mainBlockView.classList.add("player");
@@ -50,10 +49,10 @@ class Player {
         alert("ERROR!");
         break;
     }
-    moveNum++;
-    updateSidebar();
-    if (player.getLocationId(0,0) == goalId && player.position.direction.name == null){
-      victory();
+    game.moveNum++;
+    app.updateSidebar();
+    if (this.getLocationId(0,0) == game.board.map.goalId && this.position.direction.name == null){
+      game.victory();
     }
 
   }

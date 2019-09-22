@@ -8,17 +8,20 @@
       <script src="resources/Names.js"></script>
       <script src="resources/Default.js"></script>
 
-
+      <script src="scripts/AI.js"></script>
+      <script src="scripts/App.js"></script>
+      <script src="scripts/Map.js"></script>
+      <script src="scripts/Modal.js"></script>
+      <script src="scripts/MapManager.js"></script>
+      <script src="scripts/Game.js"></script>
+      <script src="scripts/System.js"></script>
       <script src="scripts/Block.js"></script>
       <script src="scripts/Board.js"></script>
       <script src="scripts/Brain.js"></script>
       <script src="scripts/Decoder.js"></script>
-
       <script src="scripts/Direction.js"></script>
-
       <script src="scripts/Player.js"></script>
       <script src="scripts/Position.js"></script>
-
       <script src="scripts/mainScript.js"></script>
 
 
@@ -27,24 +30,25 @@
         <div id="main">
           <div id="welcome" class="frame">
             <h1 id="title">FLOP AI</h1>
-            <h3 id="play" class="welcomeOption disabledPlay" onclick="play()">PLAY</h3>
+            <h3 id="play" class="welcomeOption pulse" onclick="app.play()">PLAY</h3> <!-- disabledPlay -->
 
             <h3 class="welcomeOption" onclick="document.getElementById('gameFileInput').click()">Upload a Game File</h3>
-            <input id="gameFileInput" class="hidden" type="file" onchange="readGameFile()"/>
+            <input id="gameFileInput" class="hidden" type="file" onchange="app.readGameFile()"/>
 
-            <h3  class="welcomeOption" onclick="startDefault()">Start Fresh</h3>
-            <h3  class="welcomeOption" onclick="saveGame()">Quick Save</h3>
-            <h3  class="welcomeOption" onclick="saveAs()">Save As</h3>
+            <h3  class="welcomeOption" onclick="app.resetToDefault()">Start New Game File</h3>
+            <h3  class="welcomeOption" onclick="app.saveGame()">Quick Save</h3>
+            <h3  class="welcomeOption" onclick="app.saveAs()">Save As</h3>
+            <h3  id="sessionName" >Session Name: N/A</h3>
 
           </div>
           <div id="home" class="hidden frame">
             <h1 id="title">FLOP AI</h1>
-            <h3 class="level" onclick="selectLevel(1)">Level 1</h3>
-            <h3 class="level" onclick="selectLevel(2)">Level 2</h3>
-            <h3 class="level" onclick="selectLevel(3)">Level 3</h3>
-            <h3 class="level" onclick="selectLevel(4)">Level 4</h3>
-            <h3 class="level" onclick="selectLevel(5)">Level 5</h3>
-            <h3 class="back" onclick="back()">Back</h3>
+            <h3 class="level" onclick="game.selectLevel(1)">Level 1</h3>
+            <h3 class="level" onclick="game.selectLevel(2)">Level 2</h3>
+            <h3 class="level" onclick="game.selectLevel(3)">Level 3</h3>
+            <h3 class="level" onclick="game.selectLevel(4)">Level 4</h3>
+            <h3 class="level" onclick="game.selectLevel(5)">Level 5</h3>
+            <h3 class="back" onclick="app.back()">Back</h3>
           </div>
 
           <div id="board" class="hidden frame">
@@ -56,10 +60,10 @@
                   <p id="brainName"></p>
                   <p id="brainTraits"></p>
                 </div>
-                <h3 class="back" onclick="back()">Back</h3>
+                <h3 class="back" onclick="app.back()">Back</h3>
             </div>
           </div>
-          <div id="victory" class="hidden frame"><h1>Congratulations!</h1><h1 id="victoryMoveNum">Moves: 0</h1><h3 class="back" onclick="back()">Back</h3></div>
+          <div id="victory" class="hidden frame"><h1>Congratulations!</h1><h1 id="victoryMoveNum">Moves: 0</h1><h3 class="back" onclick="app.back()">Back</h3></div>
         </div>
     </body>
 </html>
