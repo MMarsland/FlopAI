@@ -2,7 +2,6 @@ class AI {
   constructor() {
     this.brain = new Brain();
     this.running = false;
-    this.cheatMode;
     this.decoder;
     this.decodedMapDirections;
   }
@@ -13,9 +12,9 @@ class AI {
     //Loop AI forever (Until victory)
 
     //Decode the map! TEMP (Change the decoding system)
-    console.log("Decoding the map!");
-    this.decoder = new Decoder(createMapArray());
-    this.decodedMapDirections = this.decoder.decode();
+    //console.log("Decoding the map!");
+    //this.decoder = new Decoder(createMapArray());
+    //this.decodedMapDirections = this.decoder.decode();
 
     while(this.running && app.view == "board") {
       // Decide On move
@@ -83,13 +82,13 @@ class AI {
     } while (!this.decoder.isLegalMove(game.player.position.x, game.player.position.y, game.player.position.direction.getNumber(), direction));
     */
 
-    if (this.cheatMode) {
+  //  if (this.cheatMode) {
       // TEMP 2: Use the Map Decoder to determine the best move based on current position!
-      direction = this.getBestNextDirection(game.player.position);
-    } else {
+      //direction = this.getBestNextDirection(game.player.position);
+    //} else {
       // Real : use the Nural Network to pick a direction
       direction = this.brain.getMove(this.brain.getOutputs(getInputs()));
-    }
+  //  }
 
     // Return Move
     return direction;
@@ -99,20 +98,22 @@ class AI {
     //Visually decode
     // Work backwards from goal doing the animation
     this.decoder = new Decoder(createMapArray());
-    this.decodedMapDirections = this.decoder.decode();
-
+    // FIND BEST PATH
+    console.log(this.decoder.getMoveOrder());
     // Run animation
-    this.runAnimation();
+    //this.runAnimation(this.decoder.getReverseMoveOrder());
 
-    //Run Quick
-    this.cheatMode = true;
-    this.run();
+    //Run Quick in cheat mode!
+
+    //this.cheatMode = true;
+    //this.run();
   }
 
   runAnimation() {
     // Do selection Animation
 
     // Color in selected square
+    // Starting from goalId, Make move
 
     // Fade
   }

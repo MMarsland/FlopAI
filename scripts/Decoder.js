@@ -3,6 +3,7 @@ class Decoder {
     this.mapArray = mapArray;
     this.decodedMap;
     this.pieces = [[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]]];
+    this.decode();
   }
 
   decode() {
@@ -148,7 +149,113 @@ class Decoder {
     return temp;
   }
 
-  // Update to stop moving onto dead squares
+  getReverseMoveOrder() {
+    let moveOrder = this.getMoveOrder();
+    let reverseOrder = [];
+    let direction;
+    for (let i=moveOrder.length-1;i>=0;i--){
+      switch (moveOrder[i]) {
+        case "N":
+          direction = "S";
+          break;
+        case "E":
+          direction = "W";
+          break;
+        case "S":
+          direction = "N";
+          break;
+        case "W":
+          direction = "E";
+          break;
+        default:
+          alert("ERROR!!!");
+      }
+      reverseOrder.push(direction);
+    }
+    return reverseOrder;
+  }
+
+  getMoveOrder() {
+      //Fake move the player basically..
+      let startCoords = Coord.create(game.board.map.playerStartPosition.getCoords());
+      let endId = game.board.map.goalId;
+      let endCoords =  Coord.create([endId.substring(0,1), endId.substring(1,2), 0]);
+      let currCoords = startCoords;
+      let moveOrderArray = [];
+      let moveOrderCoords = [];
+      // Pieces, z, i, j = z, x, y
+      while (!currCoords.equals(endCoords)) {
+        let bestMove = this.getMoveFromCoords(currCoords)
+        moveOrderArray.push(bestMove);
+        console.log(moveOrderCoords);
+        console.log(currCoords);
+        moveOrderCoords.push(currCoords);
+
+
+        currCoords = this.makeFakeMove(currCoords, bestMove);
+      }
+      return moveOrderCoords;
+  }
+
+  makeFakeMove(startCoords, direction) {
+    //HIDE
+    // Don't worry about limits, just make the move!
+    let endCoords = startCoords;
+    if (direction == "N") {
+      if (startCoords.z == 0) {
+        endCoords.x--;
+        endCoords.z = 1;
+      } else if (startCoords.z == 1) {
+        endCoords.x -= 2;
+        endCoords.z = 0;
+      } else if (startCoords.z == 2) {
+        endCoords.x--;
+        endCoords.z = 2;
+      }
+    } else if (direction == "E") {
+      if (startCoords.z == 0) {
+        endCoords.y += 2;
+        endCoords.z = 2;
+      } else if (startCoords.z == 1) {
+        endCoords.y++;
+        endCoords.z = 1;
+      } else if (startCoords.z == 2) {
+        endCoords.y++;
+        endCoords.z = 0;
+      }
+    } else if (direction == "S") {
+      if (startCoords.z == 0) {
+        endCoords.x += 2;
+        endCoords.z = 1;
+      } else if (startCoords.z == 1) {
+        endCoords.x++;
+        endCoords.z = 0;
+      } else if (startCoords.z == 2) {
+        endCoords.x++;
+        endCoords.z = 2;
+      }
+    } else if (direction == "W") {
+      if (startCoords.z == 0) {
+        endCoords.y--;
+        endCoords.z = 2;
+      } else if (startCoords.z == 1) {
+        endCoords.y--;
+        endCoords.z = 1;
+      } else if (startCoords.z == 2) {
+        endCoords.y -= 2;
+        endCoords.z = 0;
+      }
+    } else {
+      alert("ERROR!");
+      console.log("ERROR!");
+    }
+    return endCoords;
+  }
+
+  getMoveFromCoords(coords) {
+    return this.pieces[coords.z][coords.x][coords.y];
+  }
+
   isLegalMove(x,y,z, direction) {
     let illegalDirections = [];
     if (z == 0) {

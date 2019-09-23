@@ -25,7 +25,7 @@ document.onkeydown = function (e) {
 
 function keyPressed(keyCode) {
   //comment
-  console.log(keyCode);
+  //console.log(keyCode);
   if (keyCode == 87 || keyCode == 38 && app.view == "board") { // W
     game.player.move("N");
   } else if (keyCode == 65 || keyCode == 37 && app.view == "board") { // A
@@ -44,9 +44,7 @@ function keyPressed(keyCode) {
     System.saveGame();
   } else if (keyCode == 84 && app.view != "home") { // T
     ai.testBrain(); // In Brain
-  } else if (keyCode == 67 && app.view != "home") { // C "CheatMode"
-    ai.cheatMode = !ai.cheatMode;
-  } else if (keyCode == 86 && app.view == "board") { // V "Decode and run animation"
+  } else if (keyCode == 67 && app.view == "board") { // V "Decode and run animation"
     ai.demoCheatMode();
   } else if (keyCode == 89 && app.view != "home") { // Y
     ai.brain.randomizeBrain();
