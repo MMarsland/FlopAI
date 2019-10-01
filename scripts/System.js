@@ -106,27 +106,15 @@ class System {
 
   static sigmoid(x) {
     // 1 / (1 + e^-x)
-    return (1 / (1 + Math.E ** (-x)));
+    return (1 / (1 + (Math.E ** (-x))));
   }
 
-  static sigmoidMatrix(matrix) {
-    let newMatrix = [];
-    for (let i=0;i<matrix.length;i++){
-      newMatrix[i] = sigmoid(matrix[i]);
-    }
-    return newMatrix;
+  static dsigmoid(y) {
+    return y * (1 - y);
   }
 
   static tanh(x) {
     //(e^(2z)-1)/(e^(2z)+1),
     return ((Math.E**(2*x)-1)/(Math.E**(2*x)+1));
-  }
-
-  static tanhMatrix(matrix) {
-    let newMatrix = [];
-    for (let i=0;i<matrix.length;i++){
-      newMatrix[i] = tanh(matrix[i]);
-    }
-    return newMatrix;
   }
 }

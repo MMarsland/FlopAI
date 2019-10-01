@@ -1,15 +1,169 @@
+
+let nn = new NeuralNetwork(2,6,1);
 class Brain {
   constructor() {
-    // Gonna Start with 100 inputs, 64, 32, 16, 8, 4 Outputs
+    // Gonna Start with 100 inputs, 20, 4 Outputs
     this.name = "";
     this.traits = "";
-    this.biases = [];
-    this.wirings = [];
-    this.outputs;
+    this.nn = new NeuralNetwork(100,36,12,4);
     this.randomizeBrain();
+  }
+  // New Neural Network Functions
+  randomizeBrain(){
+    this.name = System.getRandomName();
+    this.traits = System.getRandomTraitsText();
+
+    console.log("Brain Randomized");
+  }
+
+  //Functions for Learning and Testing
+
+  static test() {
+    //let brain = new Brain();
+    //let resultMatrix = brain.nn.feedForward(Brain.getInputsMatrix());
+    //let results = resultMatrix.to1DArray();
+    //console.log(results);
+    //console.log(Brain.getDirection(results));
+
+    //TEST with XOR
+
+
+    for (let i=0; i<500000; i++) {
+      let randInt = System.getRandInt(0,3);
+      let inputs, targets;
+      if (randInt == 0) {
+        inputs = new Matrix([[0], [0]]);
+        targets = new Matrix([[1]]);
+      } else if (randInt == 1) {
+        inputs = new Matrix([[0], [1]]);
+        targets = new Matrix([[0.75]]);
+      } else if (randInt == 2) {
+        inputs = new Matrix([[1], [0]]);
+        targets = new Matrix([[0.5]]);
+      } else if (randInt == 3) {
+        inputs = new Matrix([[1], [1]]);
+        targets = new Matrix([[0.25]]);
+      }
+      nn.train(inputs, targets);
+    }
 
   }
 
+  static show() {
+    console.log("Successfully Trained:");
+    console.log("Input: [0,0] => Result: [4] == "+ nn.feedForward(new Matrix([[0],[0]])).scalar(4).toString());
+    console.log("Input: [0,1] => Result: [3] == "+ nn.feedForward(new Matrix([[0],[1]])).scalar(4).toString());
+    console.log("Input: [1,0] => Result: [2] == "+ nn.feedForward(new Matrix([[1],[0]])).scalar(4).toString());
+    console.log("Input: [1,1] => Result: [1] == "+ nn.feedForward(new Matrix([[1],[1]])).scalar(4).toString());
+  }
+
+
+  getMove() {
+    let results = this.nn.feedForward(Brain.getInputsMatrix()).to1DArray();
+    console.log(results);
+    return Brain.getDirection(results);
+  }
+
+
+  // Old functions
+  static getInputsMatrix() {
+    //Gets an array that represents the current map state (from the map UI)
+    let mapArray = createMapArray();
+    let inputs = new Matrix(100,1);
+    for (let row=0;row<10;row++) {
+      for (let col=0;col<10;col++) {
+        inputs.setVal(row*10+col,0,Brain.translateMapValue(mapArray[row][col]));
+      }
+    }
+    console.log("InputsMatrix:");
+    console.log(inputs);
+    return inputs;
+  }
+
+  static translateMapValue(mapVal) {
+    switch (mapVal) {
+      case 1:
+        return 0.2;
+      case 2:
+        return 0.4;
+      case 3:
+        return 0.8;
+      case 4:
+        return 0.6;
+      default:
+        return 0;
+    }
+  }
+
+  static getDirection(outputs) {
+    let max = Math.max(...outputs);
+    let index = outputs.indexOf(max);
+    if (index == 0) {
+      return "N";
+    } else if (index == 1) {
+      return "E";
+    } else if (index == 2) {
+      return "S";
+    } else if (index == 3) {
+      return "W";
+    } else {
+      alert("ERROR (Index)");
+    }
+  }
+
+
+
+
+
+
+  //Upload and Download Functions
+  encodeBrain(text) {
+    let brainText = text.substring(text.indexOf("Brain:"));
+    let nameText = brainText.substring(brainText.indexOf("Name:"));
+    this.name = nameText.substring(6, nameText.indexOf("\n"));
+    let traitsText = brainText.substring(brainText.indexOf("Traits:"));
+    this.traits = traitsText.substring(8, traitsText.indexOf("\n"));
+    let neuronText = brainText.substring(brainText.indexOf("Neurons:"));
+    let neuronString = neuronText.substring(neuronText.indexOf("[")+1, neuronText.indexOf("]"));
+    let wiringsText = brainText.substring(brainText.indexOf("Wirings:"));
+    let wiringsString = wiringsText.substring(wiringsText.indexOf("[")+1, wiringsText.indexOf("]"));
+    //Add Neurons to Col1
+    let neuronVals = neuronString.split(",");
+    for (let i=0;i<neuronVals.length;i++){
+      this.biases[i] = neuronVals[i];
+    }
+    let wiringsVals = wiringsString.split(",");
+    for (let i=0;i<wiringsVals.length;i++){
+      this.wirings[i] = wiringsVals[i];
+    }
+    console.log("Brain Uploaded");
+  }
+
+  getBrainText() {
+    let text = "Brain:\n";
+    text += "Name: "+this.name+"\n";
+    text += "Traits: "+this.traits+"\n";
+    text += "Neurons:\n[";
+    for (let i=0; i<this.biases.length;i++){
+      text += this.biases[i] + "";
+      text += (i == this.biases.length-1)? "]\n" : ",";
+    }
+    text += "Wirings:\n[";
+    for (let i=0; i<this.wirings.length;i++){
+      text += this.wirings[i] + "";
+      text += (i == this.wirings.length-1)? "]\n" : ",";
+    }
+    return text;
+  }
+
+
+
+
+
+
+
+  //Old Neural Functions
+  /*
   randomizeBrain(){
     let numWirings = 100 * 8 + 8 * 4;
     let numbiases = 8 + 4;
@@ -181,4 +335,6 @@ class Brain {
         return 0;
     }
   }
+  */
+
 }

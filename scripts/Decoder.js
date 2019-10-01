@@ -253,6 +253,7 @@ class Decoder {
   }
 
   getMoveFromCoords(coords) {
+    // Hide
     return this.pieces[coords.z][coords.x][coords.y];
   }
 

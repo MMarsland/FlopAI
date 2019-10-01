@@ -15,14 +15,14 @@ class AI {
     //console.log("Decoding the map!");
     //this.decoder = new Decoder(createMapArray());
     //this.decodedMapDirections = this.decoder.decode();
-
+    this.running = true;
     while(this.running && app.view == "board") {
       // Decide On move
       let chosenMove = this.pickMove();
       // Make Move
       this.move(chosenMove);
       // Wait for the right time
-      await System.sleep(100);
+      await System.sleep(10);
       // Repeat
     }
     this.running = false;
@@ -84,10 +84,10 @@ class AI {
 
   //  if (this.cheatMode) {
       // TEMP 2: Use the Map Decoder to determine the best move based on current position!
-      //direction = this.getBestNextDirection(game.player.position);
+      direction = this.getBestNextDirection(game.player.position);
     //} else {
       // Real : use the Nural Network to pick a direction
-      direction = this.brain.getMove(this.brain.getOutputs(getInputs()));
+      //direction = this.brain.getMove(this.brain.getOutputs(getInputs()));
   //  }
 
     // Return Move
@@ -99,14 +99,14 @@ class AI {
     // Work backwards from goal doing the animation
     this.decoder = new Decoder(createMapArray());
     // FIND BEST PATH
-    console.log(this.decoder.getMoveOrder());
+    this.decodedMapDirections = this.decoder.decode();
     // Run animation
     //this.runAnimation(this.decoder.getReverseMoveOrder());
 
     //Run Quick in cheat mode!
 
     //this.cheatMode = true;
-    //this.run();
+    this.run();
   }
 
   runAnimation() {
