@@ -1,80 +1,87 @@
 class NeuralNetwork {
-  constructor(inputsNum, hidNum, outputsNum) {
+  constructor(...args) {
     //Arguments in the form (#inputs, #1st hidden layer nodes, #2nd hidden layer nodes, outputs)
-    // Ging to first try 2 -> 2 -> 1
-    this.wIH = new Matrix(hidNum, inputsNum);
-    this.wHO = new Matrix(outputsNum, hidNum);
 
-    this.bH = new Matrix(hidNum,1);
-    this.bO = new Matrix(outputsNum,1);
+    this.weights = [];
+    this.biases = [];
+    let numArgs = args.length;
+    if (numArgs < 2) { throw new Error("Not enough Args!")}
 
-    this.wIH.randomize();
-    this.wHO.randomize();
+    for (let i=0; i<numArgs-1;i++) {
+      this.weights.push(new Matrix(args[i+1], args[i]));
+      this.biases.push(new Matrix(args[i+1], 1));
+      this.weights[i].randomize();
+      this.biases[i].zero();
+    }
 
-    this.bH.zero();
-    this.bO.zero();
-
-    this.lr = 0.1;
+    this.hidden_layers = numArgs-2;
+    this.learning_rate = 0.1;
   }
 
   feedForward(inputs) {
-    let weights_IH = this.wIH.getCopy();
-    let bias_H = this.bH.getCopy();
-    let hidden = weights_IH.getMultiply(inputs);
-    hidden.add(bias_H);
-    hidden.map(System.sigmoid);
-    // Now actual Hidden
-    let weights_HO = this.wHO.getCopy();
-    let bias_O = this.bO.getCopy();
-    let outputs = weights_HO.getMultiply(hidden);
-    outputs.add(bias_O);
-    outputs.map(System.sigmoid);
+    if (!(inputs instanceof Matrix)) {
+      inputs = new Matrix(inputs);
+    }
 
-    return outputs;
+    let weights;
+    let bias;
+    let layers = [inputs];
+    for (let i=0;i<this.hidden_layers+1;i++) {
+      weights = this.weights[i].getCopy();
+      bias = this.biases[i].getCopy();
+      layers.push(weights.getMultiply(layers[i]));
+      layers[i+1].add(bias);
+      layers[i+1].map(System.sigmoid);
+    }
+
+    return layers[layers.length-1];
   }
 
   train(inputs, targets) {
-    let weights_IH = this.wIH.getCopy();
-    let bias_H = this.bH.getCopy();
-    let hiddens = weights_IH.getMultiply(inputs);
-    hiddens.add(bias_H);
-    hiddens.map(System.sigmoid);
-    // Now actual Hidden
-    let weights_HO = this.wHO.getCopy();
-    let bias_O = this.bO.getCopy();
-    let outputs = weights_HO.getMultiply(hiddens);
-    outputs.add(bias_O);
-    outputs.map(System.sigmoid);
-    // Now actual Outputs
+    if (!(inputs instanceof Matrix)) {
+      inputs = new Matrix(inputs);
+    }
+    if (!(targets instanceof Matrix)) {
+      targets = new Matrix(targets);
+    }
 
-    // TRAIN IT!
-    let errors_O = targets.getCopy();
-    errors_O.subtract(outputs);
-    let wHO_trans = weights_HO.getTranspose();
-    let errors_H = wHO_trans.getMultiply(errors_O);
-    // Everything preserved so far!
+    // Feed Forward
+    let weights;
+    let bias;
+    let layers = [inputs];
+    for (let i=0;i<this.hidden_layers+1;i++) {
+      weights = this.weights[i].getCopy();
+      bias = this.biases[i].getCopy();
+      layers.push(weights.getMultiply(layers[i]));
+      layers[i+1].add(bias);
+      layers[i+1].map(System.sigmoid);
+    }
 
-    //Get Changes
-    let gradient_HO = outputs.getCopy();
-    gradient_HO.map(System.dsigmoid);
-    gradient_HO.dot(errors_O);
-    gradient_HO.scalar(this.lr);
-    let hiddens_trans = hiddens.getTranspose();
-    let delta_weights_HO = gradient_HO.getMultiply(hiddens_trans);
+    // Back Propagation
+    // Errors
+    let errors = [];
+    errors[layers.length-1] = targets.subtract(layers[layers.length-1]);
+    let transpose;
+    for (let i=layers.length-2;i>0;i--) {
+      transpose = this.weights[i].getTranspose();
+      errors[i] = transpose.getMultiply(errors[i+1]);
+    }
+    //Get Gradients & Make Changes
+    let gradient;
+    let delta;
+    for (let i=0; i<layers.length-1;i++) {
+      gradient = layers[i+1].getCopy();
+      gradient.map(System.dsigmoid);
+      gradient.dot(errors[i+1]);
+      gradient.scalar(this.learning_rate);
+      transpose = layers[i].getTranspose();
+      delta = gradient.getMultiply(transpose);
+      this.weights[i].add(delta);
+      this.biases[i].add(gradient);
+    }
+  }
 
-    let gradient_IH = hiddens.getCopy();
-    gradient_IH.map(System.dsigmoid);
-    gradient_IH.dot(errors_H);
-    gradient_IH.scalar(this.lr);
-    let inputs_trans = inputs.getTranspose();
-    let delta_weights_IH = gradient_IH.getMultiply(inputs_trans);
-
-    let delta_bias_O = gradient_HO.getCopy();
-    let delta_bias_H = gradient_IH.getCopy();
-
-    this.wHO.add(delta_weights_HO);
-    this.wIH.add(delta_weights_IH);
-    this.bH.add(delta_bias_H);
-    this.bO.add(delta_bias_O);
+  setLearningRate(value) {
+    this.learning_rate = value;
   }
 }

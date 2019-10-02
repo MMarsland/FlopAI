@@ -156,7 +156,7 @@ class Matrix {
   }
 
   subtract(m1) { // this - m1
-    if (!(m1.rows == this.rows && m1.cols == this.cols)) { alert("Bad Matrix Subtraction"); console.log("Bad Matrix Subtraction"); console.trace();}
+    if (!(m1.rows == this.rows && m1.cols == this.cols)) { alert("Bad Matrix Subtraction"); console.log("Bad Matrix Subtraction"); this.print(); m1.print(); console.trace();}
     let val = 0;
     for (let row=0; row<m1.rows; row++) {
       for (let col=0;col<m1.cols; col++) {
@@ -168,7 +168,7 @@ class Matrix {
   }
 
   getMultiply(m1) { // this * m1 // [[1,2],[3,4]]
-    if (!(this.cols == m1.rows)) { alert("Bad Matrix Multiplication"); console.log("Bad Matrix Multiplication"); console.trace();}
+    if (!(this.cols == m1.rows)) { alert("Bad Matrix Multiplication"); console.log("Bad Matrix Multiplication"); this.print(); m1.print(); console.trace();}
     let result = new Matrix(this.rows,m1.cols);
     let sum = 0;
     for (let row=0; row<this.rows;row++) {
