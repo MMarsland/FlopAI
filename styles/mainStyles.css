@@ -41,6 +41,18 @@ html, body
   background-color: purple;
 }
 
+.editing > .block:hover {
+  opacity: 0.75;
+}
+
+.placingPlayer > .block:hover{
+  background-color: red;
+}
+
+.placingGoal > .block:hover{
+  background-color: black;
+}
+
 .regular
 {
   background-color: lightgray;
@@ -57,6 +69,10 @@ html, body
 }
 
 .player {
+  background-color: red;
+}
+
+.playerSecond {
   background-color: red;
 }
 
@@ -100,6 +116,7 @@ html, body
 #infoArea {
   font-size: 20px;
   padding: 0px 20px;
+  margin-bottom:50px;
 }
 
 #infoArea p {
@@ -196,6 +213,36 @@ html, body
 }
 .back:hover {
   font-size: 40px;
+}
+
+#editSave {
+  color: gold;
+  font-size: 25px;
+  height: 54px;
+  width: 100%;
+  margin: 0px 0px 0px 0px;
+  text-align: center;
+  line-height: 54px;
+  position: absolute;
+  bottom: 70px;
+}
+#editSave:hover {
+  font-size: 30px;
+}
+
+.editButtons{
+  color: gold;
+  font-size: 25px;
+  height: 54px;
+  width: 100%;
+  margin: 0px 0px 0px 0px;
+  text-align: center;
+  line-height: 54px;
+  position: relative;
+}
+
+.editButtons:hover {
+  font-size: 30px;
 }
 
 #play {

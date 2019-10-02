@@ -1,6 +1,6 @@
 class Board {
-   constructor (mapArray) {
-     this.map = new Map(mapArray);
+   constructor (map) {
+     this.map = map;
      this.blocks = [[],[],[],[],[],[],[],[],[],[]];
   }
 
@@ -14,20 +14,7 @@ class Board {
         } else if (this.map.array[i][j] == 0){
           block = new Block(i+""+j, j, i, "dead");
         } else if (this.map.array[i][j] == 2) {
-          block = new Block(i+""+j, j, i, "goal");
-        } else if (this.map.array[i][j] == 3) {
-          block = new Block(i+""+j, j, i, "regular");
-          this.map.playerStartPosition = new Position(i,j,null);
-          if (i != 0){
-            if (this.map.array[i-1][j] == 4) {
-              this.map.playerStartPosition = new Position(i,j,"N");
-            }
-          }
-          if (j != 0) {
-            if (this.map.array[i][j-1] == 4) {
-              this.map.playerStartPosition = new Position(i,j,"W");
-            }
-          }
+          block = new Block(i+""+j, j, i, "regular goal");
         } else {
           block = new Block(i+""+j, j, i, "regular");
         }
@@ -50,8 +37,6 @@ class Board {
         block.displayAsChildOf(this.getView());
       }
     }
-    // TEMP!
-    this.map.goalId = document.getElementsByClassName("goal")[0].getAttribute("id");
   }
 
   getView(){

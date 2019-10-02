@@ -9,10 +9,11 @@ let modifyingKeyOn = false;
 function startUp() {
   // Start the system
   //system = new System();
+  mapManager = new MapManager();
   ai = new AI();
   app = new App();
   game = new Game();
-  mm = new MapManager();
+
 
   app.start();
 }
@@ -39,7 +40,9 @@ function keyPressed(keyCode) {
     game.reset();
   } else if (keyCode == 66) { // B
     app.back();
-  } else if (keyCode == 77 && app.view != "home") { // M
+  } else if (keyCode == 69 && app.view == "board") { //<--"NICE" E
+    mapManager.editSave();
+  }else if (keyCode == 77 && app.view != "home") { // M
     mapManager.downloadMap(mapManager.getMapArray());
   } else if (keyCode == 80 && app.view != "home") { // P
     System.saveGame();

@@ -8,7 +8,7 @@ class Player {
     mainBlockView.classList.add("player");
     if (this.position.direction.name) {
       let secondaryBlockView = this.findBlockById(this.getLocationId(this.position.direction.xOffset(), this.position.direction.yOffset()));
-      secondaryBlockView.classList.add("player");
+      secondaryBlockView.classList.add("playerSecond");
     }
   }
 
@@ -17,7 +17,7 @@ class Player {
     mainBlockView.classList.remove("player");
     if (this.position.direction.name) {
       let secondaryBlockView = this.findBlockById(this.getLocationId(this.position.direction.xOffset(), this.position.direction.yOffset()));
-      secondaryBlockView.classList.remove("player");
+      secondaryBlockView.classList.remove("playerSecond");
     }
   }
 
@@ -30,31 +30,31 @@ class Player {
   }
 
   move(direction){
-    // Comment
-    switch(direction){
-      case "N":
-        this.moveN();
-        break;
-      case "E":
-        this.moveE();
-        break;
-      case "S":
-        this.moveS();
-        break;
-      case "W":
-        this.moveW();
-        break;
-      default:
-        console.log("ERROR!");
-        alert("ERROR!");
-        break;
+    if(!mapManager.editing){
+      switch(direction){
+        case "N":
+          this.moveN();
+          break;
+        case "E":
+          this.moveE();
+          break;
+        case "S":
+          this.moveS();
+          break;
+        case "W":
+          this.moveW();
+          break;
+        default:
+          console.log("ERROR!");
+          alert("ERROR!");
+          break;
+      }
+      game.moveNum++;
+      app.updateSidebar();
+      if (this.getLocationId(0,0) == game.board.map.goalId && this.position.direction.name == null){
+        game.victory();
+      }
     }
-    game.moveNum++;
-    app.updateSidebar();
-    if (this.getLocationId(0,0) == game.board.map.goalId && this.position.direction.name == null){
-      game.victory();
-    }
-
   }
 
   moveN() {
