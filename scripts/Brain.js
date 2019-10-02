@@ -70,7 +70,7 @@ class Brain {
   // Old functions
   static getInputsMatrix() {
     //Gets an array that represents the current map state (from the map UI)
-    let mapArray = createMapArray();
+    let mapArray = mapManager.getMapArray();
     let inputs = new Matrix(100,1);
     for (let row=0;row<10;row++) {
       for (let col=0;col<10;col++) {
@@ -311,7 +311,7 @@ class Brain {
   }
 
   getInputs() {
-    let mapArray = createMapArray();
+    let mapArray = mapManager.getMapArray();
     let inputsMatrix = [];
     for (let i=0;i<10;i++) {
       for (let j=0;j<10;j++) {

@@ -1,7 +1,7 @@
 let app;
-//let system;
 let ai;
 let game;
+let mapManager;
 
 let modifyingKeyOn = false;
 
@@ -12,6 +12,7 @@ function startUp() {
   ai = new AI();
   app = new App();
   game = new Game();
+  mm = new MapManager();
 
   app.start();
 }
@@ -39,7 +40,7 @@ function keyPressed(keyCode) {
   } else if (keyCode == 66) { // B
     app.back();
   } else if (keyCode == 77 && app.view != "home") { // M
-    MapManager.saveMap(createMapArray());
+    mapManager.downloadMap(mapManager.getMapArray());
   } else if (keyCode == 80 && app.view != "home") { // P
     System.saveGame();
   } else if (keyCode == 84 && app.view != "home") { // T

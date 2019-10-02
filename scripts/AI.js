@@ -13,7 +13,7 @@ class AI {
 
     //Decode the map! TEMP (Change the decoding system)
     //console.log("Decoding the map!");
-    //this.decoder = new Decoder(createMapArray());
+    //this.decoder = new Decoder(mapManager.getMapArray());
     //this.decodedMapDirections = this.decoder.decode();
     this.running = true;
     while(this.running && app.view == "board") {
@@ -97,7 +97,7 @@ class AI {
   demoCheatMode() {
     //Visually decode
     // Work backwards from goal doing the animation
-    this.decoder = new Decoder(createMapArray());
+    this.decoder = new Decoder(mapManager.getMapArray());
     // FIND BEST PATH
     this.decodedMapDirections = this.decoder.decode();
     // Run animation
