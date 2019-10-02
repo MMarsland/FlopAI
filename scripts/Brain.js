@@ -1,5 +1,5 @@
 
-let nn = new NeuralNetwork(1,1);
+let nn = new NeuralNetwork(1,10,10,1);
 class Brain {
   constructor() {
     // Gonna Start with 100 inputs, 20, 4 Outputs
@@ -32,17 +32,17 @@ class Brain {
       let randInt = System.getRandInt(0,3);
       let inputs, targets;
       if (randInt == 0) {
-        inputs = new Matrix([[0.5]]);
-        targets = new Matrix([[1]]);
+        inputs = new Matrix([[0.1505]]);
+        targets = new Matrix([[0.345]]);
       } else if (randInt == 1) {
-        inputs = new Matrix([[0.4]]);
-        targets = new Matrix([[0.8]]);
+        inputs = new Matrix([[0.212]]);
+        targets = new Matrix([[0.103]]);
       } else if (randInt == 2) {
-        inputs = new Matrix([[0.2]]);
-        targets = new Matrix([[0.4]]);
+        inputs = new Matrix([[0.420]]);
+        targets = new Matrix([[0.69]]);
       } else if (randInt == 3) {
-        inputs = new Matrix([[0.1]]);
-        targets = new Matrix([[0.2]]);
+        inputs = new Matrix([[0.8]]);
+        targets = new Matrix([[0.1]]);
       }
       nn.train(inputs, targets);
     }
@@ -51,12 +51,12 @@ class Brain {
 
   static show() {
     console.log("Successfully Trained:");
-    console.log("Input: [0.5] => Result: [1] == "+ nn.feedForward(new Matrix([[0.5]])).toString());
-    console.log("Input: [0.0.4] => Result: [0.8] == "+ nn.feedForward(new Matrix([[0.4]])).toString());
-    console.log("Input: [0.2] => Result: [0.4] == "+ nn.feedForward(new Matrix([[0.2]])).toString());
-    console.log("Input: [0.1] => Result: [0.2] == "+ nn.feedForward(new Matrix([[0.1]])).toString());
+    console.log("Input: [0.1505] => Result: [0.345] == "+ nn.feedForward(new Matrix([[0.1505]])).toString());
+    console.log("Input: [0.212] => Result: [0.103] == "+ nn.feedForward(new Matrix([[0.212]])).toString());
+    console.log("Input: [0.420] => Result: [0.69] == "+ nn.feedForward(new Matrix([[0.420]])).toString());
+    console.log("Input: [0.8] => Result: [0.1] == "+ nn.feedForward(new Matrix([[0.8]])).toString());
     console.log("GUESS:")
-    console.log("Input: [0.3] => Result: [0.6] == "+ nn.feedForward(new Matrix([[0.3]])).toString());
+    console.log("Input: [0.3] => Result: [??] == "+ nn.feedForward(new Matrix([[0.3]])).toString());
   }
 
 

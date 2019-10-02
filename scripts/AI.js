@@ -22,7 +22,7 @@ class AI {
       // Make Move
       this.move(chosenMove);
       // Wait for the right time
-      await System.sleep(10);
+      await System.sleep(200);
       // Repeat
     }
     this.running = false;
