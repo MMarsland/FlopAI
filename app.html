@@ -46,11 +46,46 @@
           </div>
           <div id="home" class="hidden frame">
             <h1 id="title">FLOP AI</h1>
-            <h3 class="level" onclick="game.selectLevel(1)">Level 1</h3>
-            <h3 class="level" onclick="game.selectLevel(2)">Level 2</h3>
-            <h3 class="level" onclick="game.selectLevel(3)">Level 3</h3>
-            <h3 class="level" onclick="game.selectLevel(4)">Level 4</h3>
-            <h3 class="level" onclick="game.selectLevel(5)">Level 5</h3>
+            <div id="levelArea">
+              <div class="arrowsArea"><div class="arrow-left disabled" onclick="mapManager.leftArrow()"></div></div>
+              <div class="levelPaneArea">
+                <div class="levelPane" paneNum="0">
+                  <h3 class="level" onclick="game.selectLevel('new')">New Level</h3>
+                  <h3 class="level" onclick="game.selectLevel(2)">Level 1</h3>
+                  <h3 class="level" onclick="game.selectLevel(3)">Level 2</h3>
+                  <h3 class="level" onclick="game.selectLevel(4)">Level 3</h3>
+                  <h3 class="level" onclick="game.selectLevel(5)">Level 4</h3>
+                </div>
+                <div class="levelPane paneRight" paneNum="1">
+                  <h3 class="level" onclick="game.selectLevel(5)">Level 5</h3>
+                  <h3 class="level" onclick="game.selectLevel(6)">Level 6</h3>
+                  <h3 class="level" onclick="game.selectLevel(7)">Level 7</h3>
+                  <h3 class="level" onclick="game.selectLevel(8)">Level 8</h3>
+                  <h3 class="level" onclick="game.selectLevel(9)">Level 9</h3>
+                </div>
+                <div class="levelPane paneRight" paneNum="2">
+                  <h3 class="level" onclick="game.selectLevel(10)">Level 10</h3>
+                  <h3 class="level" onclick="game.selectLevel(11)">Level 11</h3>
+                  <h3 class="level" onclick="game.selectLevel(12)">Level 12</h3>
+                  <h3 class="level" onclick="game.selectLevel(13)">Level 13</h3>
+                  <h3 class="level" onclick="game.selectLevel(14)">Level 14</h3>
+                </div>
+                <div class="levelPane paneRight" paneNum="3">
+                  <h3 class="level" onclick="game.selectLevel(15)">Level 15</h3>
+                  <h3 class="level" onclick="game.selectLevel(16)">Level 16</h3>
+                  <h3 class="level" onclick="game.selectLevel(17)">Test Name</h3>
+                  <h3 class="level" onclick="game.selectLevel(18)">Logner Name</h3>
+                  <h3 class="level" onclick="game.selectLevel(19)">S</h3>
+                </div>
+                <div class="levelPane paneRight" paneNum="4">
+                  <h3 class="level" onclick="game.selectLevel(20)">sTrA_N321NsName</h3>
+                  <h3 class="level" onclick="game.selectLevel(21)"></h3>
+                  <h3 class="level" onclick="game.selectLevel(22)">Quality Level</h3>
+                  <h3 class="level" onclick="game.selectLevel(23)">Michael's Test Level</h3>
+                </div>
+              </div>
+              <div class="arrowsArea"><div class="arrow-right" onclick="mapManager.rightArrow()"></div></div>
+            </div>
             <!--<h3 class="welcomeOption" onclick="app.goToLevelDesigner()">New Level</h3>-->
             <h3 class="back" onclick="app.back()">Back</h3>
           </div>
@@ -64,9 +99,9 @@
                   <p id="brainName"></p>
                   <p id="brainTraits"></p>
                 </div>
-                <!--<h4 class="editButtons hidden" onclick="mapManager.edit()">Player</h4>-->
-                <!--<h4 class="editButtons hidden" onclick="mapManager.edit()">Goal</h4>-->
-                <h4 id="editSave" onclick="mapManager.edit()">Edit</h4>
+                <h4 class="editButtons hidden" onclick="mapManager.quickSave()">Quick Save</h4>
+                <h4 class="editButtons hidden" onclick="mapManager.saveAs()">Save As</h4>
+                <h4 id="editDone" onclick="mapManager.editDone()">Edit</h4>
                 <h3 class="back" onclick="app.back()">Back</h3>
             </div>
           </div>

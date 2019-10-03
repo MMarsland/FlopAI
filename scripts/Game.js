@@ -5,17 +5,10 @@ class Game {
     this.moveNum = 0;
   }
 
-  selectLevel(levelNumber) {
+  selectLevel(levelName) {
     // TEMP: Until the new map system is implemented
-    let mapArray;
-    let maps = [mapAI1, mapAI2, map3, map4, map5];
-    if (levelNumber >= 1 || levelNumber <= 5) {
-      mapArray = maps [levelNumber -1];
-    } else {
-      mapArray = mapAI1;
-    }
     //Start the map
-    this.startLevel(new Map(mapArray));
+    this.startLevel(new Map(mapManager.maps[levelName]));
   }
 
   startLevel(map) {

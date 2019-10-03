@@ -1,10 +1,13 @@
 class MapManager {
   constructor() {
-    this.maps = new Object({length: 0,});
+    this.maps = new Object({length: 8, 'new':map7, 0:map0, 1:map1, 2:map2, 3:map3, 4:map4, 5:map5, 6:map6, 7:map7});
+
     this.editing = false;
     this.placingGoal = false;
     this.placingPlayer = false;
     this.testPlayer;
+    this.levelPane = 0;
+    this.lastLevelPane = 4;
   }
 
   clickBlock(event) {
@@ -74,6 +77,8 @@ class MapManager {
   saveMap() {
     //Make maps a dictionary!
     let map = new Map(this.getMapArray());
+    this.maps[map.name] = map;
+    this.maps[length] = this.maps[length]++;
   }
 
   downloadMap(mapArray) {
@@ -92,29 +97,28 @@ class MapManager {
     download("map", mapText);
   }
 
-  editSave() {
+  editDone() {
+    //Hide
     if (this.editing) {
-      this.save();
+      this.done();
     } else {
       this.edit();
     }
   }
 
   edit() {
-    document.getElementById("editSave").innerHTML = "Save";
-    document.getElementById("editSave").setAttribute("onClick", "mapManager.save()");
+    document.getElementById("editDone").innerHTML = "Done";
     document.getElementById("playArea").classList.add("editing");
-    //document.getElementsByClassName("editButtons")[0].classList.remove("hidden");
-    //document.getElementsByClassName("editButtons")[1].classList.remove("hidden");
+    document.getElementsByClassName("editButtons")[0].classList.remove("hidden");
+    document.getElementsByClassName("editButtons")[1].classList.remove("hidden");
     this.editing = true;
   }
 
-  save() {
-    document.getElementById("editSave").innerHTML = "Edit";
-    document.getElementById("editSave").setAttribute("onclick", "mapManager.edit()");
+  done() {
+    document.getElementById("editDone").innerHTML = "Edit";
     document.getElementById("playArea").classList.remove("editing");
-    //document.getElementsByClassName("editButtons")[0].classList.add("hidden");
-    //document.getElementsByClassName("editButtons")[1].classList.add("hidden");
+    document.getElementsByClassName("editButtons")[0].classList.add("hidden");
+    document.getElementsByClassName("editButtons")[1].classList.add("hidden");
     this.editing = false;
   }
 
@@ -139,5 +143,37 @@ class MapManager {
     console.log("Setting new Player");
     this.testPlayer = new Player(game.board.map.playerStartPosition.x, game.board.map.playerStartPosition.y, game.board.map.playerStartPosition.direction.name);
     game.player = this.testPlayer;
+  }
+
+  rightArrow() {
+    console.log(this.levelPane);
+    if (this.levelPane < this.lastLevelPane) {
+      document.getElementsByClassName("levelPane")[this.levelPane].classList.add("paneLeft");
+      document.getElementsByClassName("levelPane")[this.levelPane+1].classList.remove("paneRight");
+      this.levelPane++;
+    }
+    this.updateArrows();
+  }
+
+  leftArrow() {
+    if (this.levelPane > 0) {
+      document.getElementsByClassName("levelPane")[this.levelPane].classList.add("paneRight");
+      document.getElementsByClassName("levelPane")[this.levelPane-1].classList.remove("paneLeft");
+      this.levelPane--;
+    }
+    this.updateArrows();
+  }
+
+  updateArrows() {
+    if (this.levelPane != 0) {
+      document.getElementsByClassName("arrow-left")[0].classList.remove("disabled");
+    } else {
+      document.getElementsByClassName("arrow-left")[0].classList.add("disabled");
+    }
+    if (this.levelPane == this.lastLevelPane) {
+      document.getElementsByClassName("arrow-right")[0].classList.add("disabled");
+    } else {
+      document.getElementsByClassName("arrow-right")[0].classList.remove("disabled");
+    }
   }
 }
