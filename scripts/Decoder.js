@@ -325,4 +325,26 @@ class Decoder {
     }
     return true;
   }
+
+  /* Animation Methods (Temp?) */
+  highlightPiece(x,y,z) {
+    //Color 1 => #44ff44
+    /*.element {
+  animation: pulse 5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #001F3F;
+  }
+  100% {
+    background-color: #FF4136;
+  }
+}
+*/
+  }
+
+  hightlightBlock(blockid) {
+    block = this.document.getElementById(blockid);
+  }
 }
