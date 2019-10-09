@@ -3,21 +3,22 @@ class Decoder {
     this.mapArray = mapArray;
     this.decodedMap;
     this.pieces = [[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]]];
-    this.decode();
+    //this.decode();
   }
 
-  decode() {
+  async decode() {
+    console.log("DECODING");
     //Will this let me fold it?
     // Assign Values to all pieces
     for (let z=0; z<3; z++) {
-      for (let i=0; i<10; i++) {
-        for (let j=0; j<10; j++) {
+      for (let x=0; x<10; x++) {
+        for (let y=0; y<10; y++) {
           // Find Goal (Assign 1)
           if (z == 0) { // Up, North, East, South, West.
             // i.e. standing on goal
-            this.pieces[z][i][j] = (this.mapArray[i][j] == 2)? "G" : null;
+            this.pieces[z][x][y] = (this.mapArray[x][y] == 2)? "G" : null;
           } else {
-            this.pieces[z][i][j] = null;
+            this.pieces[z][x][y] = null;
           }
         }
       }
@@ -26,17 +27,29 @@ class Decoder {
     // Repeat (Until all pieces have a value)
     let tempPieces = this.clone(this.pieces);
     let itrCount = 0;
-    while (itrCount < 50) {
+    let playerFound = false;
+    while (itrCount < 50 && !playerFound) {
+
       let dir;
       for (let z=0; z<3; z++) {
-        for (let i=0; i<10; i++) {
-          for (let j=0; j<10; j++) {
+        for (let x=0; x<10; x++) {
+          for (let y=0; y<10; y++) {
             // Don't re-assess peices with a direction
-            if (this.pieces[z][i][j] == null) {
+            if (this.pieces[z][x][y] == null) {
               // Limit to legal positions
-              if (this.isLegalPosition(i, j, z)) {
-                dir = this.getDirectionFor(i, j, z);
-                tempPieces[z][i][j] = dir;
+              if (this.isLegalPosition(x, y, z)) {
+                dir = this.getDirectionFor(x, y, z);
+                if (dir != null) {
+                  tempPieces[z][x][y] = dir;
+
+                  if (game.player.position.matches(x, y, z)) {
+                    playerFound = true;
+                    Decoder.highlightPiece(x, y, z);
+                  } else {
+                    Decoder.flashPiece(x, y, z);
+
+                  }
+                }
               }
             }
           }
@@ -44,6 +57,7 @@ class Decoder {
       }
       itrCount++;
       this.pieces = this.clone(tempPieces);
+      if (!playerFound) {await System.sleep(1000);}
     }
     return tempPieces;
   }
@@ -140,9 +154,9 @@ class Decoder {
   clone(array) {
     let temp = [[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]],[[],[],[],[],[],[],[],[],[],[]]];
     for (let z=0; z<3; z++) {
-      for (let i=0; i<10; i++) {
-        for (let j=0; j<10; j++) {
-          temp[z][i][j] = array[z][i][j];
+      for (let x=0; x<10; x++) {
+        for (let y=0; y<10; y++) {
+          temp[z][x][y] = array[z][x][y];
         }
       }
     }
@@ -154,7 +168,7 @@ class Decoder {
     let reverseOrder = [];
     let direction;
     for (let i=moveOrder.length-1;i>=0;i--){
-      switch (moveOrder[i]) {
+      switch (moveOrder[x]) {
         case "N":
           direction = "S";
           break;
@@ -183,7 +197,7 @@ class Decoder {
       let currCoords = startCoords;
       let moveOrderArray = [];
       let moveOrderCoords = [];
-      // Pieces, z, i, j = z, x, y
+      // Pieces, z, x, j = z, x, y
       while (!currCoords.equals(endCoords)) {
         let bestMove = this.getMoveFromCoords(currCoords)
         moveOrderArray.push(bestMove);
@@ -312,7 +326,7 @@ class Decoder {
     // Check Edges
     if (z == 1 && x == 0) {
       return false;
-    } else if (z == 2 && y == 9) {
+    } else if (z == 2 && y == 0) {
       return false;
     }
     // Check dead squares
@@ -327,24 +341,46 @@ class Decoder {
   }
 
   /* Animation Methods (Temp?) */
-  highlightPiece(x,y,z) {
-    //Color 1 => #44ff44
-    /*.element {
-  animation: pulse 5s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    background-color: #001F3F;
-  }
-  100% {
-    background-color: #FF4136;
-  }
-}
-*/
+  static flashPiece(x,y,z) {
+    console.log("x: " + x + ", y: "+ y + ", z: "+ z);
+    if (z==0) {//xy
+      this.flashBlock(x + "" + y);
+    } else if (z==1) { //xy and x-1y
+      this.flashBlock(x + "" +y);
+      this.flashBlock((x-1) + "" +y);
+    } else if (z==2) { //xy and xy-1
+      this.flashBlock(x + "" +y);
+      this.flashBlock(x + "" +(y-1));
+    }
   }
 
-  hightlightBlock(blockid) {
-    block = this.document.getElementById(blockid);
+  static flashBlock(blockid) {
+    console.log(blockid);
+    let block = document.getElementById(blockid);
+    block.classList.remove("flash");
+    block.offsetWidth; //FLUSH
+    block.classList.add("flash");
+    setTimeout(() => {
+        console.log(block);
+        block.classList.remove("flash");
+        block.classList.add("highlighted");
+      }, 1000);
+  }
+
+  static highlightPiece(x,y,z) {
+    if (z==0) {//xy
+      this.highlightBlock(x + "" + y);
+    } else if (z==1) { //xy and x-1y
+      this.highlightBlock(x + "" +y);
+      this.highlightBlock((x-1) + "" +y);
+    } else if (z==2) { //xy and xy-1
+      this.highlightBlock(x + "" +y);
+      this.highlightBlock(x + "" +(y-1));
+    }
+  }
+
+  static highlightBlock(blockid) {
+    let block = document.getElementById(blockid);
+    block.classList.add("highlighted");
   }
 }

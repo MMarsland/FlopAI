@@ -22,7 +22,7 @@ class AI {
       // Make Move
       this.move(chosenMove);
       // Wait for the right time
-      await System.sleep(200);
+      await System.sleep(100);
       // Repeat
     }
     this.running = false;
@@ -94,12 +94,12 @@ class AI {
     return direction;
   }
 
-  demoCheatMode() {
+  async demoCheatMode() {
     //Visually decode
     // Work backwards from goal doing the animation
     this.decoder = new Decoder(mapManager.getMapArray());
     // FIND BEST PATH
-    this.decodedMapDirections = this.decoder.decode();
+    this.decodedMapDirections = await this.decoder.decode();
     // Run animation
     //this.runAnimation(this.decoder.getReverseMoveOrder());
 

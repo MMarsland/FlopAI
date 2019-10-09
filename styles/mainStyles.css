@@ -80,28 +80,7 @@ html, body
   background-color: black;
 }
 
-.regular
-{
-  background-color: lightgray;
-}
 
-.dead
-{
-  background-color: gray;
-}
-
-.goal
-{
-  background-color: black;
-}
-
-.player {
-  background-color: red;
-}
-
-.playerSecond {
-  background-color: red;
-}
 
 #home
 {
@@ -407,6 +386,47 @@ html, body
   left: 270px !important;
 }
 
+.flash:not(.player):not(.playerSecond) {
+  animation: flash 1s 1 none;
+}
+
+@keyframes flash {
+  0% {
+    background-color: #00dd00;
+  }
+  80% {
+    background-color: #00dd00;
+  }
+  100% {
+    background-color: #77ff77;
+  }
+}
 
 
+
+.regular
+{
+  background-color: lightgray;
+}
+
+.dead
+{
+  background-color: gray;
+}
+
+.highlighted {
+  background-color: #77ff77;
+}
+
+.goal
+{
+  background-color: black !important;
+}
+
+.player {
+  background-color: red !important;
+}
+
+.playerSecond {
+  background-color: red !important;
 }

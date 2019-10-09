@@ -64,5 +64,5 @@ function keyPressed(keyCode) {
     }
   } else if (keyCode == 20) {
     modifyingKeyOn = !modifyingKeyOn;
-}
+  }
 }
