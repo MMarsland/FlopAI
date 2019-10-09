@@ -28,6 +28,7 @@ class Decoder {
     let tempPieces = this.clone(this.pieces);
     let itrCount = 0;
     let playerFound = false;
+    let iterationPieces = [];
     while (itrCount < 50 && !playerFound) {
 
       let dir;
@@ -41,13 +42,9 @@ class Decoder {
                 dir = this.getDirectionFor(x, y, z);
                 if (dir != null) {
                   tempPieces[z][x][y] = dir;
-
+                  iterationPieces.push({"x":x, "y":y, "z": z});
                   if (game.player.position.matches(x, y, z)) {
                     playerFound = true;
-                    Decoder.highlightPiece(x, y, z);
-                  } else {
-                    Decoder.flashPiece(x, y, z);
-
                   }
                 }
               }
@@ -57,7 +54,15 @@ class Decoder {
       }
       itrCount++;
       this.pieces = this.clone(tempPieces);
-      if (!playerFound) {await System.sleep(1000);}
+      if (!playerFound) {
+        Decoder.flashPieces(iterationPieces);
+        iterationPieces = [];
+        await System.sleep(1000);
+      } else {
+        Decoder.highlightPieces(iterationPieces);
+        //CELEBRATE
+        document.getElementById(game.player.position.x+""+game.player.position.y).classList.add("glow");
+      }
     }
     return tempPieces;
   }
@@ -382,5 +387,21 @@ class Decoder {
   static highlightBlock(blockid) {
     let block = document.getElementById(blockid);
     block.classList.add("highlighted");
+  }
+
+  static flashPieces(pieces) {
+    let piece;
+    for (let i=0;i<pieces.length; i++){
+      piece = pieces[i];
+      this.flashPiece(piece.x,piece.y,piece.z);
+    }
+  }
+
+  static highlightPieces(pieces) {
+    let piece;
+    for (let i=0;i<pieces.length; i++){
+      piece = pieces[i];
+      this.highlightPiece(piece.x,piece.y,piece.z);
+    }
   }
 }

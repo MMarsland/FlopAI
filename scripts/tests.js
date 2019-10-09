@@ -13,21 +13,21 @@ function testIsLegalPosition() {
         resp = decoder.isLegalPosition(x, y, z);
         if (x == 0 && z == 1) {
           if (resp != false) {
-            failArray.add({x,y,z});
+            failArray.push({x,y,z});
           } else {
             passCount++;
           }
         }
         else if (y == 0 && z == 2) {
           if (resp != false) {
-            failArray.add({x,y,z});
+            failArray.push({x,y,z});
           } else {
             passCount++;
           }
         }
         else {
           if (resp != true) {
-            failArray.add({x,y,z});
+            failArray.push({x,y,z});
           } else {
             passCount++;
           }

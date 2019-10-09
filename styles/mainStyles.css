@@ -394,15 +394,13 @@ html, body
   0% {
     background-color: #00dd00;
   }
-  80% {
+  70% {
     background-color: #00dd00;
   }
   100% {
-    background-color: #77ff77;
+    background-color: #44dd44;
   }
 }
-
-
 
 .regular
 {
@@ -425,8 +423,26 @@ html, body
 
 .player {
   background-color: red !important;
+  transition: box-shadow 2s;
 }
 
 .playerSecond {
   background-color: red !important;
+}
+
+.glow {
+  animation: glow 0.3s 1 none;
+  z-index: 20;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0px 0px 0px 0px gold;
+  }
+  75% {
+    box-shadow: 0px 0px 20px 20px gold;
+  }
+  100% {
+    box-shadow: 0px 0px 0px 0px gold;
+  }
 }
