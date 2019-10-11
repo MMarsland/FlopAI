@@ -8,7 +8,7 @@ class Game {
   selectLevel(levelName) {
     // TEMP: Until the new map system is implemented
     //Start the map
-    this.startLevel(new Map(mapManager.maps[levelName]));
+    this.startLevel(new Map(mapManager.maps[levelName], levelName));
   }
 
   startLevel(map) {

@@ -4,8 +4,9 @@ class Map {
     this.playerStartPosition;
     this.goalId;
     if (name == undefined) {
-      this.name = mapManager.maps.length;
+      name = Map.getNewName();
     }
+    this.name = name;
     this.init();
   }
 
@@ -29,5 +30,13 @@ class Map {
         }
       }
     }
+  }
+
+  static getNewName() {
+    let i=0;
+    while (mapManager.hasOwnProperty(i)) {
+      i++;
+    }
+    this.name = i;
   }
 }

@@ -41,7 +41,7 @@ function keyPressed(keyCode) {
   } else if (keyCode == 66) { // B
     app.back();
   } else if (keyCode == 69 && app.view == "board") { //<--"NICE" E
-    mapManager.editSave();
+    mapManager.editDone();
   }else if (keyCode == 77 && app.view != "home") { // M
     mapManager.downloadMap(mapManager.getMapArray());
   } else if (keyCode == 80 && app.view != "home") { // P

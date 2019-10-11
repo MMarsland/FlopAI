@@ -1,6 +1,6 @@
 class MapManager {
   constructor() {
-    this.maps = new Object({length: 8, 'new':map7, 0:map0, 1:map1, 2:map2, 3:map3, 4:map4, 5:map5, 6:map6, 7:map7});
+    this.maps = new Object({length: 8, 'default':mapArrayDefault, 1:mapArray1, 2:mapArray2, 3:mapArray3, 4:mapArray4, 5:mapArray5, 6:mapArray6, 7:mapArray7});
 
     this.editing = false;
     this.placingGoal = false;
@@ -9,7 +9,131 @@ class MapManager {
     this.levelPane = 0;
     this.lastLevelPane = 4;
   }
+  // Gets an array for the current state of the map
+  getMapArray() {
+    var mapArray = [[],[],[],[],[],[],[],[],[],[]];
+    for (let i=0; i<10; i++) {
+      for (let j=0; j<10; j++) {
+        let blockId = i+""+j;
+        let block = document.getElementById(blockId);
+        if (block.classList.contains("player")) {
+          mapArray[i][j] = 3;
+        } else if (block.classList.contains("playerSecond")) {
+          mapArray[i][j] = 4;
+        } else if (block.classList.contains("goal")) {
+          mapArray[i][j] = 2;
+        } else if (block.classList.contains("regular")) {
+          mapArray[i][j] = 1;
+        } else {
+          mapArray[i][j] = 0;
+        }
+      }
+    }
+    return mapArray;
+  }
 
+
+
+  /* Map Management (Downlaod and upload) */
+  downloadMap(mapArray) {
+    // Saves a map array
+    let mapText = "[";
+    for (let i=0; i<10; i++) {
+      mapText += "[";
+      for (let j=0; j<10; j++) {
+        mapText += mapArray[i][j] + "";
+        mapText += (j==9)? "" : ",";
+      }
+      mapText += (i==9)? "]" : "],\n";
+    }
+    mapText += "];";
+    console.log(mapText);
+    download("map", mapText);
+  }
+
+
+
+
+
+  /* In session saving of maps (After editing or on upload) */
+  quickSave() {
+    if (!game.board.map.name == "default") {
+      saveMapAs(game.board.map.name);
+    }
+  }
+
+  saveAs() {
+    //MODAL?
+    let name = prompt("What would you like to name you map?", "Awesome Map");
+    if (name == null) { // Null or empty str
+      alert("NOT SAVED: A name must be provided");
+      return;
+    }
+    if (name == "") {
+      name = Map.getNewName();
+    }
+    this.saveMapAs(name);
+  }
+
+  saveMapAs(name) {
+    //Make maps a dictionary!
+    let map = new Map(this.getMapArray(), name);
+    this.maps[map.name] = map;
+    this.maps[length] = this.maps[length]++;
+  }
+
+  /* Map Editing */
+  editDone() {
+    //Hide
+    if (this.editing) {
+      this.done();
+    } else {
+      this.edit();
+    }
+  }
+
+  edit() {
+    document.getElementById("editDone").innerHTML = "Done";
+    document.getElementById("playArea").classList.add("editing");
+    document.getElementsByClassName("editButtons")[0].classList.remove("hidden");
+    document.getElementsByClassName("editButtons")[1].classList.remove("hidden");
+    if (game.board.map.name == "default") {
+      document.getElementsByClassName("editButtons")[0].classList.add("hidden");
+    }
+    this.editing = true;
+  }
+
+  done() {
+    document.getElementById("editDone").innerHTML = "Edit";
+    document.getElementById("playArea").classList.remove("editing");
+    document.getElementsByClassName("editButtons")[0].classList.add("hidden");
+    document.getElementsByClassName("editButtons")[1].classList.add("hidden");
+    this.editing = false;
+  }
+
+  movePlayer(event) {
+    if (game.player.position.direction.getNumber() == 0) {
+      let block = event.target;
+      block.classList.remove("player");
+      this.placingPlayer = true;
+      document.getElementById("playArea").classList.add("placingPlayer");
+    }
+  }
+
+  moveGoal(event) {
+    let block = event.target;
+    block.classList.remove("goal");
+    this.placingGoal = true;
+    document.getElementById("playArea").classList.add("placingGoal");
+  }
+
+  updateMap(type) {
+    game.board.map = new Map(this.getMapArray());
+    console.log("Setting new Player");
+    game.player = new Player(game.board.map.playerStartPosition.x, game.board.map.playerStartPosition.y, game.board.map.playerStartPosition.direction.name);
+  }
+
+  /* Play area event (Click) Handling */
   clickBlock(event) {
     event.preventDefault();
     if(this.editing) {
@@ -45,106 +169,14 @@ class MapManager {
   }
 
   specialBlock(event) {
+    // Do nothing if right click on a block (FOR NOW! Could implement the addition of special blocks (While editing)(i.e. switches, shakey blocks, gates, bridges, etc...))
     event.preventDefault();
     if(this.editing) {
-
-
     }
   }
 
-  getMapArray() {
-    var mapArray = [[],[],[],[],[],[],[],[],[],[]];
-    for (let i=0; i<10; i++) {
-      for (let j=0; j<10; j++) {
-        let blockId = i+""+j;
-        let block = document.getElementById(blockId);
-        if (block.classList.contains("player")) {
-          mapArray[i][j] = 3;
-        } else if (block.classList.contains("playerSecond")) {
-          mapArray[i][j] = 4;
-        } else if (block.classList.contains("goal")) {
-          mapArray[i][j] = 2;
-        } else if (block.classList.contains("regular")) {
-          mapArray[i][j] = 1;
-        } else {
-          mapArray[i][j] = 0;
-        }
-      }
-    }
-    return mapArray;
-  }
 
-  saveMap() {
-    //Make maps a dictionary!
-    let map = new Map(this.getMapArray());
-    this.maps[map.name] = map;
-    this.maps[length] = this.maps[length]++;
-  }
-
-  downloadMap(mapArray) {
-    // Saves a map array
-    let mapText = "[";
-    for (let i=0; i<10; i++) {
-      mapText += "[";
-      for (let j=0; j<10; j++) {
-        mapText += mapArray[i][j] + "";
-        mapText += (j==9)? "" : ",";
-      }
-      mapText += (i==9)? "]" : "],\n";
-    }
-    mapText += "];";
-    console.log(mapText);
-    download("map", mapText);
-  }
-
-  editDone() {
-    //Hide
-    if (this.editing) {
-      this.done();
-    } else {
-      this.edit();
-    }
-  }
-
-  edit() {
-    document.getElementById("editDone").innerHTML = "Done";
-    document.getElementById("playArea").classList.add("editing");
-    document.getElementsByClassName("editButtons")[0].classList.remove("hidden");
-    document.getElementsByClassName("editButtons")[1].classList.remove("hidden");
-    this.editing = true;
-  }
-
-  done() {
-    document.getElementById("editDone").innerHTML = "Edit";
-    document.getElementById("playArea").classList.remove("editing");
-    document.getElementsByClassName("editButtons")[0].classList.add("hidden");
-    document.getElementsByClassName("editButtons")[1].classList.add("hidden");
-    this.editing = false;
-  }
-
-  movePlayer(event) {
-    if (game.player.position.direction.getNumber() == 0) {
-      let block = event.target;
-      block.classList.remove("player");
-      this.placingPlayer = true;
-      document.getElementById("playArea").classList.add("placingPlayer");
-    }
-  }
-
-  moveGoal(event) {
-    let block = event.target;
-    block.classList.remove("goal");
-    this.placingGoal = true;
-    document.getElementById("playArea").classList.add("placingGoal");
-  }
-
-  updateMap(type) {
-    game.board.map = new Map(this.getMapArray());
-    console.log("Setting new Player");
-    this.testPlayer = new Player(game.board.map.playerStartPosition.x, game.board.map.playerStartPosition.y, game.board.map.playerStartPosition.direction.name);
-    game.player = this.testPlayer;
-  }
-
+  /* Map Selection */
   rightArrow() {
     console.log(this.levelPane);
     if (this.levelPane < this.lastLevelPane) {
