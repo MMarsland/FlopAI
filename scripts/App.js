@@ -43,17 +43,21 @@ class App {
   }
 
   // Ready the default Game File
-  start() {
+  startDefault() {
+    // TODO: Set the session to the default session
 
+
+    //Run Play with the default
+    this.play();
   }
 
   play() {
-    // Load the current Session
-    // TEMP: for now just go to home
+    // TODO: Load the current Session File info into gameFile
+
+
+    // Then go to home
     this.changeViewTo("home");
   }
-
-
 
   saveGame() {
     if (this.sessionName == "") {
@@ -76,6 +80,7 @@ class App {
   }
 
   saveGameFile(name) {
+    // TODO: Finish this with proper form
     let text = "FlopAI Game File:\n"
     text += "Name: "+name+"\n";
     text += ai.brain.getBrainText();
@@ -97,6 +102,7 @@ class App {
     //Maps
   }
 
+  // TODO: Ensure this works with the final game files
   readSessionName(text) {
     let nameText = text.substring(text.indexOf("Name:"));
     this.setSessionName(nameText.substring(6, nameText.indexOf("\n")));
@@ -109,7 +115,8 @@ class App {
 
   resetToDefault() {
     // Add more here later to upload defaults
-    if (confirm("Are you sure you want to start a new game file?")) {
+    if (confirm("Are you sure you want to reset to the default game file?")) {
+      // TODO: Change the entire session file to the default
       this.setSessionName("Default");
     }
   }

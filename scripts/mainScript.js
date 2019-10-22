@@ -13,9 +13,6 @@ function startUp() {
   ai = new AI();
   app = new App();
   game = new Game();
-
-
-  app.start();
 }
 
 // Pickup key presses

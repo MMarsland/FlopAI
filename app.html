@@ -34,12 +34,13 @@
         <div id="main">
           <div id="welcome" class="frame">
             <h1 id="title">FLOP AI</h1>
-            <h3 id="play" class="welcomeOption pulse" onclick="app.play()">PLAY</h3> <!-- disabledPlay -->
+            <h3 id="play" class="welcomeOption pulse hidden" onclick="app.play()">PLAY</h3> <!-- disabledPlay -->
+            <h3 id="default" class="welcomeOption pulse" onclick="app.startDefault()">START DEFAULT</h3>
 
             <h3 class="welcomeOption" onclick="document.getElementById('gameFileInput').click()">Upload a Game File</h3>
             <input id="gameFileInput" class="hidden" type="file" onchange="app.readGameFile()"/>
 
-            <h3  class="welcomeOption" onclick="app.resetToDefault()">Start New Game File</h3>
+            <h3  class="welcomeOption" onclick="app.resetToDefault()">Reset to Default Game File</h3>
             <h3  class="welcomeOption" onclick="app.saveGame()">Quick Save</h3>
             <h3  class="welcomeOption" onclick="app.saveAs()">Save As</h3>
             <h3  id="sessionName" >Session Name: N/A</h3>
@@ -50,7 +51,7 @@
             <div id="levelArea">
               <div class="arrowsArea"><div class="arrow-left disabled" onclick="mapManager.leftArrow()"></div></div>
               <div class="levelPaneArea">
-                <div class="levelPane" paneNum="0">
+                <!--<div class="levelPane" paneNum="0">
                   <h3 class="level" onclick="game.selectLevel('default')">New Level</h3>
                   <h3 class="level" onclick="game.selectLevel(1)">Level 1</h3>
                   <h3 class="level" onclick="game.selectLevel(2)">Level 2</h3>
@@ -83,7 +84,7 @@
                   <h3 class="level" onclick="game.selectLevel(21)"></h3>
                   <h3 class="level" onclick="game.selectLevel(22)">Quality Level</h3>
                   <h3 class="level" onclick="game.selectLevel(23)">Michael's Test Level</h3>
-                </div>
+                </div>-->
               </div>
               <div class="arrowsArea"><div class="arrow-right" onclick="mapManager.rightArrow()"></div></div>
             </div>
