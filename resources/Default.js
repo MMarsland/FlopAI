@@ -1,1 +1,1 @@
-let defaultGameFile = ""
+let defaultGameFile = "Name: Default\n"

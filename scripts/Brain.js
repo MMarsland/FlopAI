@@ -145,16 +145,16 @@ class Brain {
     let text = "Brain:\n";
     text += "Name: "+this.name+"\n";
     text += "Traits: "+this.traits+"\n";
-    text += "Neurons:\n[";
-    for (let i=0; i<this.biases.length;i++){
-      text += this.biases[i] + "";
-      text += (i == this.biases.length-1)? "]\n" : ",";
-    }
-    text += "Wirings:\n[";
-    for (let i=0; i<this.wirings.length;i++){
-      text += this.wirings[i] + "";
-      text += (i == this.wirings.length-1)? "]\n" : ",";
-    }
+    //text += "Neurons:\n[";
+    //for (let i=0; i<this.biases.length;i++){
+  //    text += this.biases[i] + "";
+  //    text += (i == this.biases.length-1)? "]\n" : ",";
+  //  }
+  //  text += "Wirings:\n[";
+  //  for (let i=0; i<this.wirings.length;i++){
+  //    text += this.wirings[i] + "";
+  //    text += (i == this.wirings.length-1)? "]\n" : ",";
+  //  }
     return text;
   }
 

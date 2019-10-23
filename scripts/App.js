@@ -74,6 +74,13 @@ class App {
     }
     if (name == "") {
       name = "gameFile";
+    } else if (name == "default" || name == "Default") {
+      let randomName = System.getRandomTrait()+System.getRandomName();
+      if (confirm("Don't do this man, it's just gonna confuse you, and probably me too. Let's pick a better name! How about " + randomName + "?")) {
+        name = randomName;
+      } else {
+        return;
+      }
     }
     this.saveGameFile(name);
     this.setSessionName(name);
@@ -81,25 +88,47 @@ class App {
 
   saveGameFile(name) {
     // TODO: Finish this with proper form
-    let text = "FlopAI Game File:\n"
-    text += "Name: "+name+"\n";
+    let text = "FlopAI Game File:\n{\n";
+    text += "\tName: "+name+"\n";
     text += ai.brain.getBrainText();
-    text += mapManager.getMapText();
+    //text += mapManager.getMapText();
+    text += "}\n";
     System.download(name, text);
   }
 
   readGameFile() {
     console.log("Should read the file and do something with it!");
-    System.readFile("gameFileInput", app.parseGameText);
+    System.readFile("gameFileInput", app.validateGameFile);
   }
 
-  parseGameText(text) {
-    // Parse Game Text
-    //Session Names
+  toggleDefaultPlay(mode) {
+    if (mode == "play") {
+      document.getElementById("play").classList.remove("hidden");
+      document.getElementById("default").classList.add("hidden");
+    } else {
+      document.getElementById("play").classList.add("hidden");
+      document.getElementById("default").classList.remove("hidden");
+    }
+  }
+
+  validateGameFile(text) {
+    let key = text.substring(0, text.indexOf("\n"));
+    if(key == "FlopAI Game File:") {
+      // Good
+      app.setGameSession(text);
+    } else {
+      alert("The uploaded file was not recognized as a FlopAI Game File.");
+    }
+  }
+
+  setGameSession(text) {
+    //Update Session File
+    app.sessionFile = text;
+    //Session Name
     app.readSessionName(text);
-    //Brain
-    ai.brain.encodeBrain(text);
-    //Maps
+    // Session updated
+    //Change Default to play
+    this.toggleDefaultPlay("play");
   }
 
   // TODO: Ensure this works with the final game files
@@ -116,8 +145,8 @@ class App {
   resetToDefault() {
     // Add more here later to upload defaults
     if (confirm("Are you sure you want to reset to the default game file?")) {
-      // TODO: Change the entire session file to the default
-      this.setSessionName("Default");
+      this.setGameSession(defaultGameFile);
+      //this.toggleDefaultPlay("default");
     }
   }
 }
