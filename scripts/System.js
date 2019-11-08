@@ -25,6 +25,20 @@ class System {
     }
   }
 
+  static getTabbedText(indentation, text) {
+    let addTextList = text.split("\n");
+    let tabs = "";
+    let newText = "";
+    for (let i=0;i<addTextList.length;i++) {
+      tabs = "";
+      for (let j=0;j<indentation;j++) {
+        tabs += "  "; //The best indentation distance is two spaces. FACT.
+      }
+      newText += tabs + addTextList[i] + "\r\n";
+    }
+    return newText;
+  }
+
   static sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }

@@ -88,11 +88,20 @@ class App {
 
   saveGameFile(name) {
     // TODO: Finish this with proper form
-    let text = "FlopAI Game File:\n{\n";
-    text += "\tName: "+name+"\n";
-    text += ai.brain.getBrainText();
-    //text += mapManager.getMapText();
-    text += "}\n";
+    let text = System.getTabbedText(0, "FlopAI Game File:");
+    text += System.getTabbedText(0, "{");
+    text += System.getTabbedText(1, "Name: "+name);
+    text += System.getTabbedText(1, "Brain:");
+    text += System.getTabbedText(1, "{");
+    // Get Brain Text
+    //text += ai.brain.getBrainText();
+    text += System.getTabbedText(1, "}");
+    text += System.getTabbedText(1, "Maps:");
+    text += System.getTabbedText(1, "{");
+    // Get Maps Text
+    //text += mapManager.getMapsText();
+    text += System.getTabbedText(1, "}");
+    text += System.getTabbedText(0, "}\n");
     System.download(name, text);
   }
 
