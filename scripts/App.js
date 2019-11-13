@@ -90,18 +90,12 @@ class App {
     // TODO: Finish this with proper form
     let text = System.getTabbedText(0, "FlopAI Game File:");
     text += System.getTabbedText(0, "{");
-    text += System.getTabbedText(1, "Name: "+name);
-    text += System.getTabbedText(1, "Brain:");
-    text += System.getTabbedText(1, "{");
+    text += System.getTabbedText(1, "Name: '"+name+"'");
+    // Get Map Text
+    text += System.getTabbedText(1, mapManager.getMapsText());
     // Get Brain Text
-    //text += ai.brain.getBrainText();
-    text += System.getTabbedText(1, "}");
-    text += System.getTabbedText(1, "Maps:");
-    text += System.getTabbedText(1, "{");
-    // Get Maps Text
-    //text += mapManager.getMapsText();
-    text += System.getTabbedText(1, "}");
-    text += System.getTabbedText(0, "}\n");
+    text += System.getTabbedText(1, ai.brain.getBrainText());
+    text += System.getTabbedText(0, "}", true);
     System.download(name, text);
   }
 

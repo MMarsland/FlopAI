@@ -85,12 +85,3 @@ var mapArrayDefault =   [[2,1,1,1,1,1,1,1,1,1],
                 [1,1,1,1,1,1,1,1,1,1],
                 [1,1,1,1,1,1,1,1,1,1],
                 [1,1,1,1,1,1,1,1,1,3]];
-
-var mapDefault = new Map(mapArrayDefault, 'default');
-var map1 = new Map(mapArrayDefault, 1);
-var map2 = new Map(mapArrayDefault, 2);
-var map3 = new Map(mapArrayDefault, 3);
-var map4 = new Map(mapArrayDefault, 4);
-var map5 = new Map(mapArrayDefault, 5);
-var map6 = new Map(mapArrayDefault, 6);
-var map7 = new Map(mapArrayDefault, 7);

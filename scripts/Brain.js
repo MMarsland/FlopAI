@@ -17,7 +17,6 @@ class Brain {
   }
 
   //Functions for Learning and Testing
-
   static train(times) {
     //let brain = new Brain();
     //let resultMatrix = brain.nn.feedForward(Brain.getInputsMatrix());
@@ -59,13 +58,11 @@ class Brain {
     console.log("Input: [0.3] => Result: [??] == "+ nn.feedForward(new Matrix([[0.3]])).toString());
   }
 
-
   getMove() {
     let results = this.nn.feedForward(Brain.getInputsMatrix()).to1DArray();
     console.log(results);
     return Brain.getDirection(results);
   }
-
 
   // Old functions
   static getInputsMatrix() {
@@ -113,11 +110,6 @@ class Brain {
     }
   }
 
-
-
-
-
-
   //Upload and Download Functions
   encodeBrain(text) {
     let brainText = text.substring(text.indexOf("Brain:"));
@@ -142,19 +134,12 @@ class Brain {
   }
 
   getBrainText() {
-    let text = "Brain:\n";
-    text += "Name: "+this.name+"\n";
-    text += "Traits: "+this.traits+"\n";
-    //text += "Neurons:\n[";
-    //for (let i=0; i<this.biases.length;i++){
-  //    text += this.biases[i] + "";
-  //    text += (i == this.biases.length-1)? "]\n" : ",";
-  //  }
-  //  text += "Wirings:\n[";
-  //  for (let i=0; i<this.wirings.length;i++){
-  //    text += this.wirings[i] + "";
-  //    text += (i == this.wirings.length-1)? "]\n" : ",";
-  //  }
+    let text = System.getTabbedText(0, "Brain:");
+    text += System.getTabbedText(0, "{");
+    text += System.getTabbedText(1, "Name: '"+this.name+"'");
+    text += System.getTabbedText(1, "Traits: '"+this.traits+"'");
+    text += System.getTabbedText(1, this.nn.getNNText());
+    text += System.getTabbedText(0, "}", true);
     return text;
   }
 

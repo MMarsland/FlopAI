@@ -39,4 +39,8 @@ class Map {
     }
     this.name = i;
   }
+
+  getMapText() {
+    return (new Matrix(this.array)).toString();
+  }
 }

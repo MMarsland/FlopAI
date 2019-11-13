@@ -1,13 +1,21 @@
 class MapManager {
   constructor() {
-    this.maps = new Object({length: 8, 'default':mapArrayDefault, 1:mapArray1, 2:mapArray2, 3:mapArray3, 4:mapArray4, 5:mapArray5, 6:mapArray6, 7:mapArray7});
+    var mapDefault = new Map(mapArrayDefault, 'default');
+    var map1 = new Map(mapArray1, 1);
+    var map2 = new Map(mapArray2, 2);
+    var map3 = new Map(mapArray3, 3);
+    var map4 = new Map(mapArray4, 4);
+    var map5 = new Map(mapArray5, 5);
+    var map6 = new Map(mapArray6, 6);
+    var map7 = new Map(mapArray7, 7);
+    this.maps = [mapDefault, map1, map2, map3, map4, map5, map6, map7];
 
     this.editing = false;
     this.placingGoal = false;
     this.placingPlayer = false;
     this.testPlayer;
     this.levelPane = 0;
-    this.lastLevelPane = 4;
+    this.lastLevelPane = null;
   }
   // Gets an array for the current state of the map
   getMapArray() {
@@ -32,7 +40,16 @@ class MapManager {
     return mapArray;
   }
 
-
+  // Returns the map with the given name
+  getMap(name) {
+    for(let i=0;i<this.maps.length;i++) {
+      if (this.maps[i].name == name) {
+        return this.maps[i];
+      }
+    }
+    console.log("Map with name \""+name+"\" not found. Using default.");
+    return this.maps[0]; // Map not found, return default
+  }
 
   /* Map Management (Downlaod and upload) */
   downloadMap(mapArray) {
@@ -51,7 +68,21 @@ class MapManager {
     download("map", mapText);
   }
 
-
+  getMapsText() {
+    let text = System.getTabbedText(0, "Maps:");
+    text += System.getTabbedText(0, "{");
+    let mapsText = "";
+    console.log(this.maps);
+    for (let i=0;i<this.maps.length;i++) {
+      console.log(this.maps[i]);
+      mapsText += System.getTabbedText(1, "'"+this.maps[i].name+"':\n{");
+      mapsText += System.getTabbedText(2, this.maps[i].getMapText());
+      mapsText += System.getTabbedText(1, "}", (i == this.maps.length-1? true : false));
+    }
+    text += System.getTabbedText(0, mapsText);
+    text += System.getTabbedText(0, "}", true);
+    return text;
+  }
 
 
 
@@ -78,8 +109,7 @@ class MapManager {
   saveMapAs(name) {
     //Make maps a dictionary!
     let map = new Map(this.getMapArray(), name);
-    this.maps[map.name] = map;
-    this.maps[length] = this.maps[length]++;
+    this.maps.push(map)
   }
 
   /* Map Editing */

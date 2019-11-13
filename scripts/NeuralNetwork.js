@@ -84,4 +84,47 @@ class NeuralNetwork {
   setLearningRate(value) {
     this.learning_rate = value;
   }
+
+  getNNText() {
+    let text = System.getTabbedText(0, "Neural Network:");
+    text += System.getTabbedText(0, "{");
+    // Hidden layers
+    text += System.getTabbedText(1, "Hidden Layers: '" + this.hidden_layers+"'");
+    // Learning Rate
+    text += System.getTabbedText(1, "Learning Rate: '" + this.learning_rate+"'");
+    // Weights
+    text += System.getTabbedText(1, this.getWeightsText());
+    // Biases
+    text += System.getTabbedText(1, this.getBiasesText());
+    text += System.getTabbedText(0, "}", true);
+    return text;
+  }
+
+  getWeightsText() {
+    let text = System.getTabbedText(0, "Weights:\n{");
+    let weightsText = "";
+    for (let layer=1; layer<=this.hidden_layers; layer++) {
+      weightsText += System.getTabbedText(0, "Layer " + layer +":\n{");
+      weightsText += System.getTabbedText(1, this.weights[layer].toString());
+      weightsText += System.getTabbedText(0, "}");
+    }
+    weightsText = weightsText.substring(0, weightsText.length - 2);
+    text += System.getTabbedText(1, weightsText);
+    text += System.getTabbedText(0, "}", true);
+    return text;
+  }
+
+  getBiasesText() {
+    let text = System.getTabbedText(0, "Biases:\n{");
+    let biasesText = "";
+    for (let layer=1; layer<=this.hidden_layers; layer++) {
+      biasesText += System.getTabbedText(0, "Layer " + layer +":\n{");
+      biasesText += System.getTabbedText(1, this.biases[layer].toString());
+      biasesText += System.getTabbedText(0, "}");
+    }
+    biasesText = biasesText.substring(0, biasesText.length - 2);
+    text += System.getTabbedText(1, biasesText);
+    text += System.getTabbedText(0, "}", true);
+    return text;
+  }
 }

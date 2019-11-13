@@ -1,6 +1,3 @@
-
-
-
 function testIsLegalPosition() {
   this.decoder = new Decoder(mapManager.maps[7]);
 
