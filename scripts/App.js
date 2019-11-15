@@ -1,8 +1,8 @@
 class App {
   constructor() {
-    this.sessionName = "";
+    this.sessionName = "Default";
     this.view = "welcome";
-    this.sessionFile;
+    this.sessionFile = defaultGameFile;
   }
 
   updateSidebar() {
@@ -127,8 +127,15 @@ class App {
   setGameSession(text) {
     //Update Session File
     app.sessionFile = text;
+    // Name
+    System.getTextNodes(text);
+    // Maps
+    // Brain
+
+
     //Session Name
     app.readSessionName(text);
+    MapManager.
     // Session updated
     //Change Default to play
     this.toggleDefaultPlay("play");

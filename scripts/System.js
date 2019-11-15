@@ -26,7 +26,6 @@ class System {
   }
 
   static getTabbedText(indentation, text, lastLine) {
-    console.log(text);
     let addTextList = text.split("\n");
     let tabs = "";
     let newText = "";
@@ -41,6 +40,59 @@ class System {
       return newText.substring(0, newText.length - 2);
     }
     return newText;
+  }
+
+  static getTextNodes(text) {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let lines = text.split("\n");
+    let line = "";
+    let segment = "";
+    let start;
+    let bracketCount = 0;
+    let nodes = [];
+    for (let i=0;i<lines.length;i++) { line = lines[i];
+      if (letters.includes(line.substring(0,1)) && start == null) {
+        // found the start
+        if (lines[i+1] == "{") {
+          // Container not leaf
+          console.log("Found start at: "+ line);
+          start = i;
+          continue;
+        } else {
+          // Leaf
+          console.log("Adding Line: " + line);
+          nodes.push(line);
+        }
+      }
+      if (start != null) {
+        bracketCount += (line.match(new RegExp("{", "g")) || []).length;
+        bracketCount -= (line.match(new RegExp("}", "g")) || []).length;
+        if (bracketCount == 0) {
+          // Concat all lines into a string and pass that on
+          for (let j=start; j<=i; j++) {
+            segment += lines[j] + "\r\n";
+          }
+          nodes.push(segment);
+          console.log("Adding Segment: " + segment);
+          segment = "";
+          start = null;
+          bracketCount = 0;
+        }
+      }
+    }
+    return nodes;
+  }
+
+  static getInnerText(node) {
+    let lines = node.split("\n");
+    if (lines[lines.length-1] == "") {lines.pop()};
+    if (lines.length > 1) {
+      // Segment
+
+    } else {
+      // Leaf
+      return lines[0].substring(l)
+    }
   }
 
   static sleep(ms) {
