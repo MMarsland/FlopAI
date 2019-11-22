@@ -43,24 +43,21 @@ class System {
   }
 
   static getTextNodes(text) {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     let lines = text.split("\n");
     let line = "";
     let segment = "";
-    let start;
+    let start = null;
     let bracketCount = 0;
     let nodes = [];
-    for (let i=0;i<lines.length;i++) { line = lines[i];
-      if (letters.includes(line.substring(0,1)) && start == null) {
+    for (let i=0;i<lines.length-1;i++) { line = lines[i].trim();
+      if (System.isNode(line) && start == null) {
         // found the start
-        if (lines[i+1] == "{") {
+        if (lines[i+1].includes("{")) {
           // Container not leaf
-          console.log("Found start at: "+ line);
           start = i;
           continue;
         } else {
           // Leaf
-          console.log("Adding Line: " + line);
           nodes.push(line);
         }
       }
@@ -73,7 +70,6 @@ class System {
             segment += lines[j] + "\r\n";
           }
           nodes.push(segment);
-          console.log("Adding Segment: " + segment);
           segment = "";
           start = null;
           bracketCount = 0;
@@ -83,15 +79,27 @@ class System {
     return nodes;
   }
 
-  static getInnerText(node) {
+  static isNode(line) {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    if (letters.includes(line.trim().substring(0,1)) && line.includes(":")) {return true;}
+    return false;
+  }
+
+  static getValue(node) {
     let lines = node.split("\n");
+    let text = "";
     if (lines[lines.length-1] == "") {lines.pop()};
     if (lines.length > 1) {
-      // Segment
 
+      for (let i=2; i<lines.length-1; i++) {
+        text += lines[i]+"\n";
+      }
+      // Segment
+      return text;
     } else {
       // Leaf
-      return lines[0].substring(l)
+      text = lines[0].substring(lines[0].indexOf("'")+1);
+      return text.substring(0, text.indexOf("'"));
     }
   }
 

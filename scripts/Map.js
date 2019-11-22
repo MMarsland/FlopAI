@@ -41,6 +41,20 @@ class Map {
   }
 
   getMapText() {
-    return (new Matrix(this.array)).toString();
+    let text = System.getTabbedText(0, "Name: '"+this.name+"'");
+    text += System.getTabbedText(0, "Array:\n{");
+    text += System.getTabbedText(1, (new Matrix(this.array)).toString());
+    text += System.getTabbedText(0, "}", true);
+    return text;
+  }
+
+  static uploadGameSession(text) {
+    let nodes = System.getTextNodes(System.getValue(text));
+    let stg1 = Matrix.fromString(System.getValue(nodes[1]));
+    let stg2 = stg1.toMapArray();
+    let stg3 = System.getValue(nodes[0]);
+
+    let map = new Map(stg2, stg3);
+    return map;
   }
 }

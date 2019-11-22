@@ -56,6 +56,19 @@ class Matrix {
     return array;
   }
 
+  toMapArray() {
+    let array = [];
+    let rowArray = [];
+    for (let row=0; row<this.rows; row++) {
+      rowArray = [];
+      for (let col=0;col<this.cols; col++) {
+          rowArray.push(this.getVal(row,col));
+      }
+      array.push(rowArray);
+    }
+    return array;
+  }
+
   setVal(row, col, value) {
     this.array[row][col] = value;
   }
@@ -67,7 +80,7 @@ class Matrix {
   randomize() {
     let val = 0;
     for (let row=0; row<this.rows; row++) {
-      for (let col=0;col<this.cols; col++) {
+      for (let col=0; col<this.cols; col++) {
           val = System.getRandPMNormal();
           this.setVal(row,col,val);
       }
@@ -149,6 +162,15 @@ class Matrix {
       }
     }
     return string;
+  }
+
+  static fromString(text) {
+    text = text.substring(text.indexOf("[")+1, text.lastIndexOf("]"));
+    let rows = text.substring(1, text.length-1).split("], [");
+    for (let i=0; i<rows.length;i++) {
+      rows[i] = rows[i].split(", ").map(x => parseInt(x));
+    }
+    return new Matrix(rows);
   }
 
   print() {

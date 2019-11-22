@@ -99,11 +99,6 @@ class App {
     System.download(name, text);
   }
 
-  readGameFile() {
-    console.log("Should read the file and do something with it!");
-    System.readFile("gameFileInput", app.validateGameFile);
-  }
-
   toggleDefaultPlay(mode) {
     if (mode == "play") {
       document.getElementById("play").classList.remove("hidden");
@@ -114,50 +109,51 @@ class App {
     }
   }
 
-  validateGameFile(text) {
-    let key = text.substring(0, text.indexOf("\n"));
-    if(key == "FlopAI Game File:") {
-      // Good
-      app.setGameSession(text);
-    } else {
-      alert("The uploaded file was not recognized as a FlopAI Game File.");
-    }
-  }
-
-  setGameSession(text) {
-    //Update Session File
-    app.sessionFile = text;
-    // Name
-    System.getTextNodes(text);
-    // Maps
-    // Brain
-
-
-    //Session Name
-    app.readSessionName(text);
-    MapManager.
-    // Session updated
-    //Change Default to play
-    this.toggleDefaultPlay("play");
-  }
-
-  // TODO: Ensure this works with the final game files
-  readSessionName(text) {
-    let nameText = text.substring(text.indexOf("Name:"));
-    this.setSessionName(nameText.substring(6, nameText.indexOf("\n")));
-  }
-
-  setSessionName(name) {
-    this.sessionName = name;
-    document.getElementById("sessionName").innerHTML = "Session Name: "+name;
-  }
-
   resetToDefault() {
     // Add more here later to upload defaults
     if (confirm("Are you sure you want to reset to the default game file?")) {
       this.setGameSession(defaultGameFile);
       //this.toggleDefaultPlay("default");
     }
+  }
+
+  readGameFile() {
+    System.readFile("gameFileInput", app.validateGameFile);
+  }
+
+  validateGameFile(text) {
+    let key = text.substring(0, text.indexOf("\n"));
+    if(key.includes("FlopAI Game File:")) {
+      // Good
+      app.uploadGameSession(text);
+    } else {
+      alert("The uploaded file was not recognized as a FlopAI Game File.");
+    }
+  }
+
+  uploadGameSession(text) {
+    //Update Session File
+    app.sessionFile = text;
+    let gameFileNodes = System.getTextNodes(System.getValue(text))
+    console.log(gameFileNodes);
+    this.setSessionName(System.getValue(gameFileNodes[0]));
+    // Maps
+    mapManager.uploadGameSession(System.getValue(gameFileNodes[1]));
+    // Brain
+    // ai.uplaodGameSession(System.getValue(gameFileNodes[2]));
+
+
+    //Session Name
+    //app.readSessionName(text);
+    //MapManager.
+    // Session updated
+    //Change Default to play
+    this.toggleDefaultPlay("play");
+  }
+
+  setSessionName(name) {
+    this.sessionName = name;
+    document.getElementById("sessionName").innerHTML = "Session Name: "+name;
   }
 }
 

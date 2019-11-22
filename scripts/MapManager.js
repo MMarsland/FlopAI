@@ -1,21 +1,22 @@
 class MapManager {
   constructor() {
-    var mapDefault = new Map(mapArrayDefault, 'default');
-    var map1 = new Map(mapArray1, 1);
-    var map2 = new Map(mapArray2, 2);
-    var map3 = new Map(mapArray3, 3);
-    var map4 = new Map(mapArray4, 4);
-    var map5 = new Map(mapArray5, 5);
-    var map6 = new Map(mapArray6, 6);
-    var map7 = new Map(mapArray7, 7);
+    var mapDefault = new Map(mapArrayDefault, 'default', "New Level");
+    var map1 = new Map(mapArray1, "Level 1");
+    var map2 = new Map(mapArray2, "Level 2");
+    var map3 = new Map(mapArray3, "Level 3");
+    var map4 = new Map(mapArray4, "Level 4");
+    var map5 = new Map(mapArray5, "Level 5");
+    var map6 = new Map(mapArray6, "Level 6");
+    var map7 = new Map(mapArray7, "Level 7");
     this.maps = [mapDefault, map1, map2, map3, map4, map5, map6, map7];
 
     this.editing = false;
     this.placingGoal = false;
     this.placingPlayer = false;
     this.testPlayer;
-    this.levelPane = 0;
-    this.lastLevelPane = null;
+    this.levelPaneNum = null;
+    this.lastLevelPane = -1;
+    this.levelPaneLevelCount = 0;
   }
   // Gets an array for the current state of the map
   getMapArray() {
@@ -64,7 +65,6 @@ class MapManager {
       mapText += (i==9)? "]" : "],\n";
     }
     mapText += "];";
-    console.log(mapText);
     download("map", mapText);
   }
 
@@ -72,10 +72,8 @@ class MapManager {
     let text = System.getTabbedText(0, "Maps:");
     text += System.getTabbedText(0, "{");
     let mapsText = "";
-    console.log(this.maps);
     for (let i=0;i<this.maps.length;i++) {
-      console.log(this.maps[i]);
-      mapsText += System.getTabbedText(1, "'"+this.maps[i].name+"':\n{");
+      mapsText += System.getTabbedText(1, "Map "+i+":\n{");
       mapsText += System.getTabbedText(2, this.maps[i].getMapText());
       mapsText += System.getTabbedText(1, "}", (i == this.maps.length-1? true : false));
     }
@@ -109,8 +107,55 @@ class MapManager {
   saveMapAs(name) {
     //Make maps a dictionary!
     let map = new Map(this.getMapArray(), name);
-    this.maps.push(map)
+    this.addMap(map);
   }
+
+  uploadGameSession(text) {
+    let maps = System.getTextNodes(text);
+    this.maps = [];
+    for (let i=0;i<maps.length;i++) {
+      this.addMap(Map.uploadGameSession(maps[i]));
+    }
+  }
+
+  addMap(map) {
+    this.maps.push(map);
+    let paneNum = this.lastLevelPane;
+    console.log("PaneNum: "+paneNum);
+    console.log("Existing levels: "+this.levelPaneLevelCount);
+    if (this.levelPaneLevelCount == 5 || this.lastLevelPane == -1){
+      // Current last pane full or no pane
+      console.log("Making new pane");
+      this.createNewLevelPane();
+    }
+    console.log("Adding level to PaneNum: "+this.lastLevelPane);
+    // Add level to level pane
+    let level = document.createElement("h3");
+    // <h3 class="level" onclick="game.selectLevel(1)">Level 1</h3>
+    level.setAttribute("class", "level");
+    level.setAttribute("onclick", "game.selectLevel(\""+map.name+"\")");
+    level.innerHTML = map.name;
+    document.getElementsByClassName("levelPane")[this.lastLevelPane].appendChild(level);
+    this.levelPaneLevelCount++;
+  }
+
+  createNewLevelPane() {
+
+    let pane = document.createElement("div");
+    pane.setAttribute("class", "levelPane "+ (this.lastLevelPane == -1 ? "" : "paneRight"));
+    pane.setAttribute("paneNum", this.lastLevelPane+1);
+
+    document.getElementsByClassName("levelPaneArea")[0].appendChild(pane);
+    this.levelPaneLevelCount = 0;
+    if (this.lastLevelPane == -1) {
+      // Set the default page to the first (If it exists, when created)
+      this.levelPaneNum = 0;
+    }
+    this.lastLevelPane++;
+
+  }
+
+
 
   /* Map Editing */
   editDone() {
@@ -208,31 +253,30 @@ class MapManager {
 
   /* Map Selection */
   rightArrow() {
-    console.log(this.levelPane);
-    if (this.levelPane < this.lastLevelPane) {
-      document.getElementsByClassName("levelPane")[this.levelPane].classList.add("paneLeft");
-      document.getElementsByClassName("levelPane")[this.levelPane+1].classList.remove("paneRight");
-      this.levelPane++;
+    if (this.levelPaneNum < this.lastLevelPane) {
+      document.getElementsByClassName("levelPane")[this.levelPaneNum].classList.add("paneLeft");
+      document.getElementsByClassName("levelPane")[this.levelPaneNum+1].classList.remove("paneRight");
+      this.levelPaneNum++;
     }
     this.updateArrows();
   }
 
   leftArrow() {
-    if (this.levelPane > 0) {
-      document.getElementsByClassName("levelPane")[this.levelPane].classList.add("paneRight");
-      document.getElementsByClassName("levelPane")[this.levelPane-1].classList.remove("paneLeft");
-      this.levelPane--;
+    if (this.levelPaneNum > 0) {
+      document.getElementsByClassName("levelPane")[this.levelPaneNum].classList.add("paneRight");
+      document.getElementsByClassName("levelPane")[this.levelPaneNum-1].classList.remove("paneLeft");
+      this.levelPaneNum--;
     }
     this.updateArrows();
   }
 
   updateArrows() {
-    if (this.levelPane != 0) {
+    if (this.levelPaneNum != 0) {
       document.getElementsByClassName("arrow-left")[0].classList.remove("disabled");
     } else {
       document.getElementsByClassName("arrow-left")[0].classList.add("disabled");
     }
-    if (this.levelPane == this.lastLevelPane) {
+    if (this.levelPaneNum == this.lastLevelPane) {
       document.getElementsByClassName("arrow-right")[0].classList.add("disabled");
     } else {
       document.getElementsByClassName("arrow-right")[0].classList.remove("disabled");
