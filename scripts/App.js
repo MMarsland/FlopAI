@@ -45,8 +45,7 @@ class App {
   // Ready the default Game File
   startDefault() {
     // TODO: Set the session to the default session
-
-
+    app.uploadGameSession(defaultGameFile);
     //Run Play with the default
     this.play();
   }
@@ -112,8 +111,8 @@ class App {
   resetToDefault() {
     // Add more here later to upload defaults
     if (confirm("Are you sure you want to reset to the default game file?")) {
-      this.setGameSession(defaultGameFile);
-      //this.toggleDefaultPlay("default");
+      app.uploadGameSession(defaultGameFile);
+      this.toggleDefaultPlay("default");
     }
   }
 

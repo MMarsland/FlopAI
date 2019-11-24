@@ -30,26 +30,29 @@ class Player {
   }
 
   move(direction){
+    let moveSuccessful = false;
     if(!mapManager.editing){
       switch(direction){
         case "N":
-          this.moveN();
+          moveSuccessful = this.moveN();
           break;
         case "E":
-          this.moveE();
+          moveSuccessful = this.moveE();
           break;
         case "S":
-          this.moveS();
+          moveSuccessful = this.moveS();
           break;
         case "W":
-          this.moveW();
+          moveSuccessful = this.moveW();
           break;
         default:
           console.log("ERROR!");
           alert("ERROR!");
           break;
       }
-      game.moveNum++;
+      if (moveSuccessful || ai.running) {
+        game.moveNum++;
+      }
       app.updateSidebar();
       if (this.getLocationId(0,0) == game.board.map.goalId && this.position.direction.name == null){
         game.victory();
@@ -64,16 +67,20 @@ class Player {
       this.position.x--;
       this.position.direction = new Direction("N");
       this.display();
+      return true;
     } else if ((this.position.direction.name == "N") && this.position.x > 1 &&!(this.findBlockById(this.getLocationId(-2,0)).classList.contains("dead"))) {
       this.erase();
       this.position.x -= 2;
       this.position.direction = new Direction(null);
       this.display();
+      return true;
     } else if ((this.position.direction.name == "W") && this.position.x > 0 && !(this.findBlockById(this.getLocationId(-1,0)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(-1,-1)).classList.contains("dead"))) {
       this.erase();
       this.position.x--;
       this.display();
+      return true;
     }
+    return false;
   }
 
   moveS() {
@@ -83,16 +90,20 @@ class Player {
       this.position.x += 2;
       this.position.direction = new Direction("N");
       this.display();
+      return true;
     } else if ((this.position.direction.name == "N") && this.position.x < 9 && !(this.findBlockById(this.getLocationId(1,0)).classList.contains("dead"))) {
       this.erase();
       this.position.x++;
       this.position.direction = new Direction(null);
       this.display();
+      return true;
     } else if ((this.position.direction.name == "W") && this.position.x < 9 && !(this.findBlockById(this.getLocationId(1,0)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(1,-1)).classList.contains("dead"))) {
       this.erase();
       this.position.x++;
       this.display();
+      return true;
     }
+    return false;
   }
 
   moveE() {
@@ -102,16 +113,20 @@ class Player {
       this.position.y += 2;
       this.position.direction = new Direction("W");
       this.display();
+      return true;
     } else if ((this.position.direction.name == "N") && this.position.y < 9 && !(this.findBlockById(this.getLocationId(0,1)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(-1,1)).classList.contains("dead"))) {
       this.erase();
       this.position.y++;
       this.display();
+      return true;
     } else if ((this.position.direction.name == "W") && this.position.y < 9 && !(this.findBlockById(this.getLocationId(0,1)).classList.contains("dead"))) {
       this.erase();
       this.position.y++;
       this.position.direction = new Direction(null);
       this.display();
+      return true;
     }
+    return false;
   }
 
   moveW() {
@@ -121,16 +136,20 @@ class Player {
       this.position.y--;
       this.position.direction = new Direction("W");
       this.display();
+      return true;
     } else if ((this.position.direction.name == "N") && this.position.y > 0 && !(this.findBlockById(this.getLocationId(0,-1)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(-1,-1)).classList.contains("dead"))) {
       this.erase();
       this.position.y--;
       this.display();
+      return true;
     } else if ((this.position.direction.name == "W") && this.position.y > 1 && !(this.findBlockById(this.getLocationId(0,-1)).classList.contains("dead")) && !(this.findBlockById(this.getLocationId(0,-2)).classList.contains("dead"))) {
       this.erase();
       this.position.y -= 2;
       this.position.direction = new Direction(null);
       this.display();
+      return true;
     }
+    return false;
   }
 
 }

@@ -86,13 +86,16 @@ class MapManager {
 
   /* In session saving of maps (After editing or on upload) */
   quickSave() {
-    if (!game.board.map.name == "default") {
-      saveMapAs(game.board.map.name);
+    console.log("Quick saving Map: "+ game.board.map.name);
+    if (!(game.board.map.name === "New Level")) {
+      this.saveMapAs(game.board.map.name);
+    } else {
+      alert("Don't quick save over the New Level template, you dumbass. Give it a cool name at least.");
+      this.saveAs();
     }
   }
 
   saveAs() {
-    //MODAL?
     let name = prompt("What would you like to name you map?", "Awesome Map");
     if (name == null) { // Null or empty str
       alert("NOT SAVED: A name must be provided");
@@ -101,18 +104,68 @@ class MapManager {
     if (name == "") {
       name = Map.getNewName();
     }
-    this.saveMapAs(name);
+    this.verifyMapSaveWithName(name);
+  }
+
+  delete() {
+    if (confirm("Are you sure you want to delete this map: \""+game.board.map.name+"\"? This action cannot be undone.")) {
+      // Overwrite
+      this.deleteMap(game.board.map);
+    }
+    this.editDone();
   }
 
   saveMapAs(name) {
-    //Make maps a dictionary!
+    console.log("Saving as: "+ name);
+    // OVER WRITE (AS DEFAULT)
+    for (let map of this.maps) {
+      if (map.name === name) {
+        // Map name already exists
+        map.array = this.getMapArray();
+        map.init()
+        this.editDone();
+        this.switchMapTo(map);
+        return;
+      }
+    }
+    // Save as new map
     let map = new Map(this.getMapArray(), name);
     this.addMap(map);
+    console.log("Map Saved");
+    this.editDone();
+    this.switchMapTo(map);
   }
+
+  switchMapTo(map) {
+    game.board.map = map;
+  }
+
+  verifyMapSaveWithName(name) {
+    for (let map of this.maps) {
+      if (map.name === name) {
+        if (confirm("There is already a map with the name \""+name+"\". Would you like to overwrite it?")) {
+          // Overwrite
+          this.saveMapAs(name);
+
+        } else {
+          // Fail to save
+          return;
+        }
+      }
+    }
+    this.saveMapAs(name);
+  }
+
+
 
   uploadGameSession(text) {
     let maps = System.getTextNodes(text);
     this.maps = [];
+    this.levelPaneNum = null;
+    this.lastLevelPane = -1;
+    this.levelPaneLevelCount = 0;
+    // Visually Delete Maps panes
+    document.getElementsByClassName("levelPaneArea")[0].innerHTML = "";
     for (let i=0;i<maps.length;i++) {
       this.addMap(Map.uploadGameSession(maps[i]));
     }
@@ -121,22 +174,34 @@ class MapManager {
   addMap(map) {
     this.maps.push(map);
     let paneNum = this.lastLevelPane;
-    console.log("PaneNum: "+paneNum);
-    console.log("Existing levels: "+this.levelPaneLevelCount);
     if (this.levelPaneLevelCount == 5 || this.lastLevelPane == -1){
       // Current last pane full or no pane
-      console.log("Making new pane");
       this.createNewLevelPane();
     }
-    console.log("Adding level to PaneNum: "+this.lastLevelPane);
     // Add level to level pane
     let level = document.createElement("h3");
     // <h3 class="level" onclick="game.selectLevel(1)">Level 1</h3>
     level.setAttribute("class", "level");
+    level.setAttribute("id", map.name);
     level.setAttribute("onclick", "game.selectLevel(\""+map.name+"\")");
     level.innerHTML = map.name;
     document.getElementsByClassName("levelPane")[this.lastLevelPane].appendChild(level);
     this.levelPaneLevelCount++;
+  }
+
+  deleteMap(map) {
+    this.maps.splice(this.maps.indexOf(map), 1);
+    let panes = document.getElementsByClassName("levelPaneArea")[0].children;
+    for (let pane of panes) {
+      let levels = pane.children;
+      for (let level of levels) {
+        console.log(level.innerHTML +" === "+ map.name);
+        if (level.innerHTML === map.name) {
+          pane.removeChild(level);
+        }
+      }
+    }
+    app.back();
   }
 
   createNewLevelPane() {
@@ -172,8 +237,10 @@ class MapManager {
     document.getElementById("playArea").classList.add("editing");
     document.getElementsByClassName("editButtons")[0].classList.remove("hidden");
     document.getElementsByClassName("editButtons")[1].classList.remove("hidden");
-    if (game.board.map.name == "default") {
+    document.getElementsByClassName("editButtons")[2].classList.remove("hidden");
+    if (game.board.map.name === "New Level") {
       document.getElementsByClassName("editButtons")[0].classList.add("hidden");
+      document.getElementsByClassName("editButtons")[2].classList.add("hidden");
     }
     this.editing = true;
   }
@@ -183,6 +250,7 @@ class MapManager {
     document.getElementById("playArea").classList.remove("editing");
     document.getElementsByClassName("editButtons")[0].classList.add("hidden");
     document.getElementsByClassName("editButtons")[1].classList.add("hidden");
+    document.getElementsByClassName("editButtons")[2].classList.add("hidden");
     this.editing = false;
   }
 
@@ -190,6 +258,8 @@ class MapManager {
     if (game.player.position.direction.getNumber() == 0) {
       let block = event.target;
       block.classList.remove("player");
+      block.classList.remove("regular");
+      block.classList.add("dead");
       this.placingPlayer = true;
       document.getElementById("playArea").classList.add("placingPlayer");
     }
@@ -198,6 +268,8 @@ class MapManager {
   moveGoal(event) {
     let block = event.target;
     block.classList.remove("goal");
+    block.classList.remove("regular");
+    block.classList.add("dead");
     this.placingGoal = true;
     document.getElementById("playArea").classList.add("placingGoal");
   }

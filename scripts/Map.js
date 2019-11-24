@@ -37,7 +37,7 @@ class Map {
     while (mapManager.hasOwnProperty(i)) {
       i++;
     }
-    this.name = i;
+    return i;
   }
 
   getMapText() {
