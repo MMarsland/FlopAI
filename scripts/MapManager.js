@@ -44,12 +44,12 @@ class MapManager {
   // Returns the map with the given name
   getMap(name) {
     for(let i=0;i<this.maps.length;i++) {
-      if (this.maps[i].name == name) {
+      if (this.maps[i].name === name) {
         return this.maps[i];
       }
     }
-    console.log("Map with name \""+name+"\" not found. Using default.");
-    return this.maps[0]; // Map not found, return default
+    console.log("Map with name \""+name+"\" not found!");
+    return null; // Map not found, return default
   }
 
   /* Map Management (Downlaod and upload) */

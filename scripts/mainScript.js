@@ -2,6 +2,7 @@ let app;
 let ai;
 let game;
 let mapManager;
+let coach;
 
 let modifyingKeyOn = false;
 
@@ -13,6 +14,7 @@ function startUp() {
   ai = new AI();
   app = new App();
   game = new Game();
+  coach = new Coach();
 }
 
 // Pickup key presses
@@ -45,7 +47,7 @@ function keyPressed(keyCode) {
     System.saveGame();
   } else if (keyCode == 84 && app.view != "home") { // T
     ai.testBrain(); // In Brain
-  } else if (keyCode == 67 && app.view == "board") { // V "Decode and run animation"
+  } else if (keyCode == 67 && app.view == "board") { // C "Decode and run animation"
     ai.demoCheatMode();
   } else if (keyCode == 89 && app.view != "home") { // Y
     ai.brain.randomizeBrain();

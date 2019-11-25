@@ -131,6 +131,26 @@ class System {
     return temp;
   }
 
+  static shuffleArray(array) {
+    var j, x, i;
+    for (i = array.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = array[i];
+        array[i] = array[j];
+        array[j] = x;
+    }
+    return array;
+}
+
+static hardShuffleArray(array) {
+  System.shuffleArray(array);
+  System.shuffleArray(array);
+  System.shuffleArray(array);
+  System.shuffleArray(array);
+  System.shuffleArray(array);
+  System.shuffleArray(array);
+}
+
   static getRandomName() {
     let nameKey = System.getRandInt(0, namesList.length-1);
     return namesList[nameKey];

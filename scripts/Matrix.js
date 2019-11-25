@@ -178,7 +178,7 @@ class Matrix {
   }
 
   subtract(m1) { // this - m1
-    if (!(m1.rows == this.rows && m1.cols == this.cols)) { alert("Bad Matrix Subtraction"); console.log("Bad Matrix Subtraction"); this.print(); m1.print(); console.trace();}
+    if (!(m1.rows == this.rows && m1.cols == this.cols)) { alert("Bad Matrix Subtraction"); console.log("Bad Matrix Subtraction"); this.print(); m1.print(); console.log(m1.rows+" == "+this.rows +"?\n"+m1.cols+" == "+this.cols+"?"); console.trace();}
     let val = 0;
     for (let row=0; row<m1.rows; row++) {
       for (let col=0;col<m1.cols; col++) {

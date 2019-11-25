@@ -84,10 +84,10 @@ class AI {
 
   //  if (this.cheatMode) {
       // TEMP 2: Use the Map Decoder to determine the best move based on current position!
-      direction = this.getBestNextDirection(game.player.position);
+      //direction = this.getBestNextDirection(game.player.position);
     //} else {
       // Real : use the Nural Network to pick a direction
-      //direction = this.brain.getMove(this.brain.getOutputs(getInputs()));
+      direction = this.brain.getMove();
   //  }
 
     // Return Move
@@ -101,7 +101,6 @@ class AI {
     // FIND BEST PATH
     this.decodedMapDirections = await this.decoder.decode();
     // Run animation
-    //this.runAnimation(this.decoder.getReverseMoveOrder());
 
     //Run Quick in cheat mode!
 

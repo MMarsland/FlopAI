@@ -67,6 +67,55 @@ class Decoder {
     return tempPieces;
   }
 
+  fastDecode() {
+    // Assign Values to all pieces
+    for (let z=0; z<3; z++) {
+      for (let x=0; x<10; x++) {
+        for (let y=0; y<10; y++) {
+          // Find Goal (Assign 1)
+          if (z == 0) { // Up, North, East, South, West.
+            // i.e. standing on goal
+            this.pieces[z][x][y] = (this.mapArray[x][y] == 2)? "G" : null;
+          } else {
+            this.pieces[z][x][y] = null;
+          }
+        }
+      }
+    }
+
+
+    // Repeat (Until all pieces have a value)
+    let tempPieces = this.clone(this.pieces);
+    let itrCount = 0;
+    let playerFound = false;
+    let iterationPieces = [];
+    while (itrCount < 50) {
+
+      let dir;
+      for (let z=0; z<3; z++) {
+        for (let x=0; x<10; x++) {
+          for (let y=0; y<10; y++) {
+            // Don't re-assess peices with a direction
+            if (this.pieces[z][x][y] == null) {
+              // Limit to legal positions
+              if (this.isLegalPosition(x, y, z)) {
+                dir = this.getDirectionFor(x, y, z);
+                if (dir != null) {
+                  tempPieces[z][x][y] = dir;
+                  iterationPieces.push({"x":x, "y":y, "z": z});
+                }
+              }
+            }
+          }
+        }
+      }
+      itrCount++;
+      this.pieces = this.clone(tempPieces);
+      iterationPieces = [];
+    }
+    return tempPieces;
+  }
+
   getDirectionFor(x,y,z) {
     let north,east,south,west;
     north = this.isLegalMove(x,y,z,"N")? true : false;

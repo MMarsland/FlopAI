@@ -12,40 +12,8 @@ class Brain {
   randomizeBrain(){
     this.name = System.getRandomName();
     this.traits = System.getRandomTraitsText();
-
+    this.nn = new NeuralNetwork(100,36,12,4);
     console.log("Brain Randomized");
-  }
-
-  //Functions for Learning and Testing
-  static train(times) {
-    //let brain = new Brain();
-    //let resultMatrix = brain.nn.feedForward(Brain.getInputsMatrix());
-    //let results = resultMatrix.to1DArray();
-    //console.log(results);
-    //console.log(Brain.getDirection(results));
-
-    //TEST with XOR
-
-
-    for (let i=0; i<times; i++) {
-      let randInt = System.getRandInt(0,3);
-      let inputs, targets;
-      if (randInt == 0) {
-        inputs = new Matrix([[0.1505]]);
-        targets = new Matrix([[0.345]]);
-      } else if (randInt == 1) {
-        inputs = new Matrix([[0.212]]);
-        targets = new Matrix([[0.103]]);
-      } else if (randInt == 2) {
-        inputs = new Matrix([[0.420]]);
-        targets = new Matrix([[0.69]]);
-      } else if (randInt == 3) {
-        inputs = new Matrix([[0.8]]);
-        targets = new Matrix([[0.1]]);
-      }
-      nn.train(inputs, targets);
-    }
-
   }
 
   static show() {
@@ -64,7 +32,6 @@ class Brain {
     return Brain.getDirection(results);
   }
 
-  // Old functions
   static getInputsMatrix() {
     //Gets an array that represents the current map state (from the map UI)
     let mapArray = mapManager.getMapArray();
@@ -323,5 +290,4 @@ class Brain {
     }
   }
   */
-
 }
