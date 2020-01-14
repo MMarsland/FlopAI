@@ -5,7 +5,7 @@ class Brain {
     // Gonna Start with 100 inputs, 20, 4 Outputs
     this.name = "";
     this.traits = "";
-    this.nn = new NeuralNetwork(100,36,12,4);
+    this.nn = new NeuralNetwork(100,8,7,6,5,4);
     this.randomizeBrain();
   }
   // New Neural Network Functions

@@ -9,11 +9,19 @@ class Coach {
     this.trainingData.push(item);
   }
 
-  assembleTrainingData() {
+  assembleAllTrainingData() {
+    let count = 0;
+    for(let map of mapManager.maps) {
+      if (count == 6) { return; }
+      count++;
+      this.assembleTrainingDataFromMapArray(map.array);
+    }
+  }
+
+  assembleTrainingDataFromMapArray(array) {
     // Just start with training on newLevel
-    let map = mapManager.getMap("Tricky Turns");
-    if (map == null) { return; }
-    let array = map.array.slice();
+    if (array == null) { console.log("Map not found... Data rapidly unassembled."); return; }
+    array = array.slice();
     //for (map of mapManager.maps) {
       //array = map.array.slice();
       let decoder = new Decoder(array);
@@ -97,13 +105,13 @@ class Coach {
     let array = this.trainingData.slice();
     //console.log(array);
     //Train AI over all data a bunch of times
-    for (let i=0; i<2000; i++) {
+    for (let i=0; i<200; i++) {
       if (this.stopTraining == true) {
         console.log("Training Interrupted!");
         break;
       }
-      if (i % 100 == 0) {
-        console.log("Starting Epoch "+(i/100+1)+"...");
+      if (i % 10 == 0) {
+        console.log("Starting Epoch "+(i/10+1)+"...");
       }
       System.hardShuffleArray(array);
       let randSubject = System.getRandInt(0, array.length-1);
