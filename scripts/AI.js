@@ -4,6 +4,7 @@ class AI {
     this.running = false;
     this.decoder;
     this.decodedMapDirections;
+    this.cheatMode;
   }
 
   async run() {
@@ -82,13 +83,13 @@ class AI {
     } while (!this.decoder.isLegalMove(game.player.position.x, game.player.position.y, game.player.position.direction.getNumber(), direction));
     */
 
-  //  if (this.cheatMode) {
-      // TEMP 2: Use the Map Decoder to determine the best move based on current position!
-      //direction = this.getBestNextDirection(game.player.position);
-    //} else {
-      // Real : use the Nural Network to pick a direction
-      direction = this.brain.getMove();
-  //  }
+    if (this.cheatMode) {
+        // TEMP 2: Use the Map Decoder to determine the best move based on current position!
+        direction = this.getBestNextDirection(game.player.position);
+    } else {
+        // Real : use the Nural Network to pick a direction
+        direction = this.brain.getMove();
+    }
 
     // Return Move
     return direction;
@@ -104,7 +105,7 @@ class AI {
 
     //Run Quick in cheat mode!
 
-    //this.cheatMode = true;
+    this.cheatMode = true;
     this.run();
   }
 

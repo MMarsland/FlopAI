@@ -42,11 +42,31 @@
             <h3 class="welcomeOption" onclick="document.getElementById('gameFileInput').click()">Upload a Game File</h3>
             <input id="gameFileInput" class="hidden" type="file" onchange="app.readGameFile()"/>
 
-            <h3  class="welcomeOption" onclick="app.resetToDefault()">Reset to Default Game File</h3>
-            <h3  class="welcomeOption" onclick="app.saveGame()">Quick Save</h3>
-            <h3  class="welcomeOption" onclick="app.saveAs()">Save As</h3>
+            <h3  class="welcomeOption hidden" onclick="app.resetToDefault()">Reset to Default Game File</h3>
+            <h3  class="welcomeOption hidden" onclick="app.saveGame()">Quick Save</h3>
+            <h3  class="welcomeOption" onclick="app.saveAs()">Save Game File</h3>
+            <h3 class="welcomeOption" onclick="app.help()">Help</h3>
             <h3  id="sessionName" >Session Name: Default</h3>
 
+          </div>
+          <div id="help" class="hidden frame">
+            <h1 id="title">FLOP AI</h1>
+            <div id="helpArea">
+              <div id="helpMainText">
+                Solve the puzzle by perfectly aligning your red piece with the black square.
+                Your red piece moves by tumbling as you move it (As a 2 by 1 by 1 cuboid).
+                Use the hotkeys listed below to play the game, make your own levels, and train an AI to solve them.
+              </div>
+              <div id="helpHotkeys">
+                <p>WASD - Move Piece</p>
+                <p>R - Reset Level &emsp; B - Back &emsp; E - Edit Level</p>
+                <p>M - Download Map &emsp; P - Save Game File</p>
+                <p>C - Cheat Mode, have an algorithm solve the puzzle for you.</p>
+                <p>Y - Regenerate the AI brain initial values</p>
+                <p>T - Test Brain &emsp; G - Run Brain</p>
+              </div>
+            </div>
+            <h3 class="back" onclick="app.back()">Back</h3>
           </div>
           <div id="home" class="hidden frame">
             <h1 id="title">FLOP AI</h1>

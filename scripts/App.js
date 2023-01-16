@@ -58,6 +58,10 @@ class App {
     this.changeViewTo("home");
   }
 
+  help() {
+    this.changeViewTo("help");
+  }
+
   saveGame() {
     if (this.sessionName == "") {
       this.saveAs();
@@ -111,8 +115,9 @@ class App {
   resetToDefault() {
     // Add more here later to upload defaults
     if (confirm("Are you sure you want to reset to the default game file?")) {
-      app.uploadGameSession(defaultGameFile);
-      this.toggleDefaultPlay("default");
+      //app.uploadGameSession(defaultGameFile);
+      //this.toggleDefaultPlay("default");
+      //window.location.reload();
     }
   }
 

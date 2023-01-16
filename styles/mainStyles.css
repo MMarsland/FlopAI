@@ -80,6 +80,31 @@ html, body
   background-color: black;
 }
 
+#helpArea {
+  height: 270px;
+  width: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction:column;
+}
+
+#helpMainText {
+  text-align: center;
+  line-height: 1.3em;
+  font-size: 18px;
+}
+
+#helpHotkeys {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+#helpHotkeys p {
+  margin: 5px;
+}
+
 
 
 #home
