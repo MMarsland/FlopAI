@@ -128,7 +128,7 @@ class Coach {
 
   runTestTrain() {
     console.log("Assebling Data");
-    this.assembleTrainingData();
+    this.assembleAllTrainingData();
     console.log("Data Assembled");
     console.log(this.trainingData);
     console.log("Training...");

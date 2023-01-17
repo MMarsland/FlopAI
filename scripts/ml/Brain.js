@@ -5,14 +5,14 @@ class Brain {
     // Gonna Start with 100 inputs, 20, 4 Outputs
     this.name = "";
     this.traits = "";
-    this.nn = new NeuralNetwork(100,8,7,6,5,4);
+    this.nn = new NeuralNetwork(100,200,200,200,4);
     this.randomizeBrain();
   }
   // New Neural Network Functions
   randomizeBrain(){
     this.name = System.getRandomName();
     this.traits = System.getRandomTraitsText();
-    this.nn = new NeuralNetwork(100,36,12,4);
+    this.nn = new NeuralNetwork(100,200,200,200,4);
     console.log("Brain Randomized");
   }
 
@@ -49,13 +49,13 @@ class Brain {
   static translateMapValue(mapVal) {
     switch (mapVal) {
       case 1:
-        return 0.2;
+        return 1;
       case 2:
-        return 0.4;
+        return -20;
       case 3:
-        return 0.8;
+        return 20;
       case 4:
-        return 0.6;
+        return 20;
       default:
         return 0;
     }

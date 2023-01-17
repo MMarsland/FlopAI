@@ -27,6 +27,7 @@ class AI {
       // Repeat
     }
     this.running = false;
+    this.cheatMode = false;
   }
 
   move(direction) {
